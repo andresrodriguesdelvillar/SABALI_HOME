@@ -4,13 +4,13 @@ import "./sub.scss";
 
 const img1 = require("../assets/5.buttons.png");
 const img2 = require("../assets/4.wolk.png");
-const img3 = require("../assets/2.zon.png");
-const img4 = require("../assets/3.aarde.png");
+const img3 = require("../assets/3.aarde.png");
+const img4 = require("../assets/2.zon.png");
 
 class Background extends Component {
   state = {};
 
-  mouseEnter = e => {
+  mouseTracker = e => {
     const layers = {
       layer2: [-8, -4.5],
       layer3: [-16, -9],
@@ -25,11 +25,12 @@ class Background extends Component {
     }
   };
   render() {
+    console.log(window.screen.orientation.type);
     return (
       <div
         id="Background"
         name="Background"
-        onMouseMove={this.mouseEnter.bind(this)}
+        onMouseMove={this.mouseTracker.bind(this)}
       >
         <div id="layer1">
           <img src={img1} />

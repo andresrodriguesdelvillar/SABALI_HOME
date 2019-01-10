@@ -11,7 +11,13 @@ class Background extends Component {
   state = {};
 
   componentDidMount() {
-    window.addEventListener("deviceorientation", this.handleOrientation, true);
+    if (this.isMobileDevice()) {
+      window.addEventListener(
+        "deviceorientation",
+        this.handleOrientation,
+        true
+      );
+    }
   }
 
   mouseTracker = e => {
@@ -29,9 +35,16 @@ class Background extends Component {
     }
   };
 
+  isMobileDevice = () => {
+    return (
+      typeof window.orientation !== "undefined" ||
+      navigator.userAgent.indexOf("IEMobile") !== -1
+    );
+  };
+
   handleOrientation = event => {
-    var beta = event.beta;
-    var gamma = event.gamma;
+    const beta = event.beta;
+    const gamma = event.gamma;
 
     const layers = {
       layer2: [16, 9],

@@ -1,0 +1,38 @@
+{
+  "name": "nodejs_server_boilerplate",
+  "version": "1.0.0",
+  "description": "a boilerplate for a nodejs backend which can be bundled with webpack",
+  "main": "server.js",
+  "scripts": {
+    "dev": "webpack --watch --config config/webpack.dev.js",
+    "build": "webpack --config config/webpack.prod.js",
+    "start": "node ../../dist/server.bundle.js"
+  },
+  "keywords": [
+    "nodejs",
+    "backend",
+    "server",
+    "boilerplate"
+  ],
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "author": "Vindao (Vincent Schmitt)",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "nodemon-webpack-plugin": "^4.0.7",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
+  }
+}

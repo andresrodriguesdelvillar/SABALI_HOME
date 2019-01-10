@@ -34,9 +34,9 @@ class Background extends Component {
     var gamma = event.gamma;
 
     const layers = {
-      layer2: [4, 2.25],
+      layer2: [16, 9],
       layer3: [8, 4.5],
-      layer4: [16, 9]
+      layer4: [4, 2.25]
     };
 
     for (let layer in layers) {

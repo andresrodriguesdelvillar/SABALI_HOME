@@ -10,6 +10,10 @@ const img4 = require("../assets/2.zon.png");
 class Background extends Component {
   state = {};
 
+  componentDidMount() {
+    window.addEventListener("deviceorientation", this.handleOrientation, true);
+  }
+
   mouseTracker = e => {
     const layers = {
       layer2: [-8, -4.5],
@@ -24,8 +28,32 @@ class Background extends Component {
         window.innerHeight}px)`;
     }
   };
+
+  handleOrientation = event => {
+    var beta = event.beta;
+    var gamma = event.gamma;
+
+    const layers = {
+      layer2: [4, 2.25],
+      layer3: [8, 4.5],
+      layer4: [16, 9]
+    };
+
+    for (let layer in layers) {
+      if (
+        window.screen.orientation.type == "landscape-primary" ||
+        window.screen.orientation.type == "landscape-secondary"
+      ) {
+        document.getElementById(layer).style.transform = `translate(${beta /
+          layers[layer][1]}px, ${gamma / layers[layer][0]}px)`;
+      } else {
+        document.getElementById(layer).style.transform = `translate(${gamma /
+          layers[layer][0]}px, ${beta / layers[layer][1]}px)`;
+      }
+    }
+  };
+
   render() {
-    console.log(window.screen.orientation.type);
     return (
       <div
         id="Background"

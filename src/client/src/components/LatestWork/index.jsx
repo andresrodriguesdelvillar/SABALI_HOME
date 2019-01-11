@@ -4,47 +4,83 @@ import "./style.scss";
 
 class LatestWork extends Component {
   state = {
-    projects: [],
-    active: 0
+    tilt: {}
+  };
+  componentWillMount() {
+    if (this.isMobileDevice()) {
+      window.addEventListener(
+        "deviceorientation",
+        this.handleOrientation,
+        true
+      );
+    }
+  }
+  isMobileDevice = () => {
+    return (
+      typeof window.orientation !== "undefined" ||
+      navigator.userAgent.indexOf("IEMobile") !== -1
+    );
   };
 
-  componentWillMount() {
-    let dummyProjects = [];
+  handleOrientation = event => {
+    const alpha = event.alpha;
+    const beta = event.beta;
+    const gamma = event.gamma;
 
-    for (let i = 0; i < 10; i++) {
-      const dummyProject = {
-        name: "dummy",
-        description: "this is the projects description",
-        image_url: "",
-        id: i
-      };
-      dummyProjects.push(dummyProject);
-    }
+    // JS math works in radians
+    var betaR = (beta / 180) * Math.PI;
+    var gammaR = (gamma / 180) * Math.PI;
+    var spinR = Math.atan2(Math.cos(betaR) * Math.sin(gammaR), Math.sin(betaR));
+
+    // convert back to degrees
+    var spin = (spinR * 180) / Math.PI;
+
+    const tilt_left = (gammaR / (Math.pi / 2)) * 100;
+    console.log(Math.pi);
+
     this.setState({
-      projects: dummyProjects
+      tilt: {
+        alpha: alpha.toString(),
+        beta: beta.toString(),
+        gamma: gamma.toString(),
+        betaR: betaR.toString(),
+        gammaR: gammaR.toString(),
+        spinR: spinR.toString(),
+        spin: spin.toString(),
+        tilt_left: tilt_left.toString()
+      }
     });
-  }
-
+  };
+  show = () => {
+    if (this.state.tilt.length > 0) {
+      this.state.tilt.map(({ value, i }) => {
+        console.log(value, i);
+        return <h1 key={i}>{value}</h1>;
+      });
+    } else {
+      return <h1>no tilt</h1>;
+    }
+  };
+  showOne = item => {
+    if (this.state.tilt[item]) {
+      return (
+        <h1>
+          {item}: {this.state.tilt[item]}
+        </h1>
+      );
+    } else {
+      return "no alpha";
+    }
+  };
   render() {
-    console.log(this.state);
-
     return (
-      <div className="latestWorkContainer">
-        <div id="mainBody">
-          <div className="image_container" style={{ height: "80%" }}>
-            {this.state.projects.map(project => {
-              return (
-                <img
-                  key={project.id}
-                  src={bigScreen}
-                  alt=""
-                  className="project_image"
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div id="projectLine">Projects</div>
+      <div id="latest work">
+        {this.showOne("beta")}
+        <br /> {this.showOne("gamma")}
+        <br /> {this.showOne("betaR")}
+        <br /> {this.showOne("gammaR")}
+        <br /> {this.showOne("tilt_left")}
+        <br /> {this.showOne("spin")}{" "}
       </div>
     );
   }

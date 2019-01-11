@@ -2,6 +2,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
+const webpack = require("webpack");
 
 //__________ Paths_______________
 
@@ -58,6 +59,11 @@ module.exports = {
       template: htmlTemplate,
       inject: true
     }),
-    new WebpackCleanupPlugin()
+    new WebpackCleanupPlugin(),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
+      }
+    })
   ]
 };

@@ -17,6 +17,7 @@
   "dependencies": {
     "jwt-decode": "^2.2.0",
     "react": "^16.6.3",
+    "react-device-detect": "^1.6.1",
     "react-dom": "^16.6.3",
     "react-router-dom": "^4.3.1"
   },

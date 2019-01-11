@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-
-import { Link } from "react-router-dom";
-
 // import {
 //   Client,
 //   MainLogo,
@@ -25,9 +22,6 @@ class Home extends Component {
   render() {
     return (
       <div className="Homecontainer">
-        <Link style={{ zIndex: 10 }} to="/latestwork">
-          latestWOrk
-        </Link>
         <Backgrund />
       </div>
     );

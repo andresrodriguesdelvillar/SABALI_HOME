@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
+import mainContext from "../../../contexts/mainContext";
+
 import {
-  mouseTracker,
-  handleOrientation,
+  getMousePosition,
+  mouseParallax,
+  getOrientation,
   mobileParallax
 } from "../../../customFuncs/deviceOrientation";
-import { isMobile } from "react-device-detect";
+
 import "./sub.scss";
 
 const img1 = require("../assets/5.buttons.png");
@@ -19,8 +22,10 @@ class Background extends Component {
   };
 
   componentDidMount() {
-    if (isMobile) {
+    // check if mobile
+    if (this.context.mobile) {
       console.log("is Mobile");
+      // add Eventlistener for mobile device tilt
       window.addEventListener(
         "deviceorientation",
         this.deviceOrientation,
@@ -28,25 +33,36 @@ class Background extends Component {
       );
     } else {
       console.log("is not mobile");
-      window.addEventListener("mousemove", mouseTracker, true);
+      // add Eventlistener for mouseMovement on desktop
+      window.addEventListener("mousemove", this.mouseParallax, true);
     }
   }
 
+  mouseParallax = e => {
+    // creates Mouse Parallax
+    const mousePosition = getMousePosition(e);
+    const layers = {
+      layer2: [-32, -32],
+      layer3: [-16, -16],
+      layer4: [-9, -9]
+    };
+    mouseParallax(mousePosition, layers, 5);
+  };
+
   deviceOrientation = e => {
-    const orientation = handleOrientation(e);
-    mobileParallax(orientation, window.screen.orientation.type, 5);
+    // creates Device-tilt Parallax
+    const orientation = getOrientation(e);
+    const layers = {
+      layer2: [-32, -32],
+      layer3: [-16, -16],
+      layer4: [-9, -9]
+    };
+    mobileParallax(orientation, window.screen.orientation.type, 5, layers);
   };
 
   render() {
     return (
       <div id="Background" name="Background">
-        <div id="orientation">
-          <h1>
-            {this.state.orientation.tilt_horizontal}
-            <br />
-            {this.state.orientation.tilt_vertical}
-          </h1>
-        </div>
         <div id="layer1">
           <img src={img1} />
         </div>
@@ -63,5 +79,7 @@ class Background extends Component {
     );
   }
 }
+
+Background.contextType = mainContext;
 
 export default Background;

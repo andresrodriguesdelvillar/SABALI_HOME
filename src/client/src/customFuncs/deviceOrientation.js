@@ -1,19 +1,20 @@
-export const mouseTracker = e => {
-  const layers = {
-    layer2: [-32, -32],
-    layer3: [-16, -16],
-    layer4: [-9, -9]
-  };
-
+export const mouseParallax = (position, layers, maxMove) => {
   for (let layer in layers) {
-    document.getElementById(layer).style.transform = `translate(${(e.clientX *
+    document.getElementById(layer).style.transform = `translate(${(position.x *
+      maxMove *
       layers[layer][0]) /
-      window.innerWidth}px, ${(e.clientY * layers[layer][1]) /
+      window.innerWidth}px, ${(position.y * maxMove * layers[layer][1]) /
       window.innerHeight}px)`;
   }
 };
 
-export const handleOrientation = e => {
+export const getMousePosition = e => {
+  const x = e.clientX - window.innerWidth / 2;
+  const y = e.clientY - window.innerHeight / 2;
+  return { x: x, y: y };
+};
+
+export const getOrientation = e => {
   const alpha = event.alpha;
   const beta = event.beta;
   const gamma = event.gamma;
@@ -37,12 +38,7 @@ export const handleOrientation = e => {
   return to_return;
 };
 
-export const mobileParallax = (orientaion, type, maxMove) => {
-  const layers = {
-    layer2: [-32, -32],
-    layer3: [-16, -16],
-    layer4: [-9, -9]
-  };
+export const mobileParallax = (orientaion, type, maxMove, layers) => {
   for (let layer in layers) {
     if (type == "landscape-primary") {
       document.getElementById(

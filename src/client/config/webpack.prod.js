@@ -2,6 +2,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
+const ServiceWorkerPlugin = require("serviceworker-webpack-plugin");
 const webpack = require("webpack");
 
 //__________ Paths_______________
@@ -30,6 +31,7 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js", ".jsx"]
   },
+
   module: {
     rules: [
       {
@@ -64,6 +66,9 @@ module.exports = {
       "process.env": {
         NODE_ENV: JSON.stringify("production")
       }
+    }),
+    new ServiceWorkerPlugin({
+      entry: path.join(__dirname, "../service-worker.js")
     })
   ]
 };

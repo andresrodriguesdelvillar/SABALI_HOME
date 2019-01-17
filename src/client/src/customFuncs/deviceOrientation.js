@@ -1,4 +1,12 @@
+export const getMousePosition = e => {
+  // returns mouse position with the center as (0/0)
+  const x = e.clientX - window.innerWidth / 2;
+  const y = e.clientY - window.innerHeight / 2;
+  return { x: x, y: y };
+};
+
 export const mouseParallax = (position, layers, maxMove) => {
+  // creates mouse Parralax based on layers and maxMove parameters
   for (let layer in layers) {
     document.getElementById(layer).style.transform = `translate(${(position.x *
       maxMove *
@@ -8,24 +16,13 @@ export const mouseParallax = (position, layers, maxMove) => {
   }
 };
 
-export const getMousePosition = e => {
-  const x = e.clientX - window.innerWidth / 2;
-  const y = e.clientY - window.innerHeight / 2;
-  return { x: x, y: y };
-};
-
 export const getOrientation = e => {
-  const alpha = event.alpha;
   const beta = event.beta;
   const gamma = event.gamma;
 
   // JS math works in radians
   var betaR = (beta / 180) * Math.PI;
   var gammaR = (gamma / 180) * Math.PI;
-  var spinR = Math.atan2(Math.cos(betaR) * Math.sin(gammaR), Math.sin(betaR));
-
-  // convert back to degrees
-  var spin = (spinR * 180) / Math.PI;
 
   const tilt_horizontal = gammaR / Math.PI;
   const tilt_vertical_portrait = (betaR - Math.PI) / Math.PI;

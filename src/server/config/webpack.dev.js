@@ -4,9 +4,7 @@ const NodemonPlugin = require("nodemon-webpack-plugin");
 const BaseDir = path.resolve(__dirname, "../", "../", "../");
 
 module.exports = {
-  entry: {
-    main: ["./server.js"]
-  },
+  entry: ["@babel/polyfill", "./server.js"],
   output: {
     filename: "server.bundle.js",
     path: path.resolve(BaseDir, "dist/")

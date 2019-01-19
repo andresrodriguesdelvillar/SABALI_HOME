@@ -2,6 +2,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
+const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
 
 //__________ Paths_______________
 
@@ -72,6 +73,7 @@ module.exports = {
       template: htmlTemplate,
       inject: true
     }),
+    new WebpackCleanupPlugin(),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,

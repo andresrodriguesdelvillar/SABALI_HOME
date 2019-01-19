@@ -55,9 +55,9 @@ connect(
   .catch(err => console.log(err));
 
 // ROUTES
-import route from "./routes/Users";
+import Users from "./routes/Users";
 
-app.use("/user", route);
+app.use("/user", Users);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {

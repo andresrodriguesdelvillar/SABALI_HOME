@@ -29,7 +29,7 @@
     "express-http-to-https": "^1.1.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.15",
-    "nodemailer": "^5.1.1"
+    "node-fetch": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

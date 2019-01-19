@@ -12,9 +12,9 @@ import {
 import "./sub.scss";
 
 const img1 = require("../assets/5.buttons.png");
-const img2 = require("../assets/4.wolk.png");
-const img3 = require("../assets/3.aarde.png");
-const img4 = require("../assets/2.zon.png");
+const img2 = require("../assets/3.aarde.png");
+const img3 = require("../assets/ocean-klein.png");
+const img4 = require("../assets/sky-klein.jpg");
 
 class Background extends Component {
   state = {

@@ -17,6 +17,11 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        parser: {
+          amd: true
+        }
       }
     ]
   },

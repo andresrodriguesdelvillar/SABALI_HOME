@@ -10,7 +10,7 @@ render(<App />, document.getElementById("root"));
 // Learn more about service workers: http://bit.ly/CRA-PWA
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js");
+  navigator.serviceWorker.register("sw.js");
 }
 
 // serviceWorker.register();

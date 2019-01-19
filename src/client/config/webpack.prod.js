@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
 const ServiceWorkerPlugin = require("serviceworker-webpack-plugin");
 const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 //__________ Paths_______________
 
@@ -59,7 +60,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: htmlTemplate,
-      inject: true
+      inject: true,
+      favicon: "./src/templates/favicon.ico"
     }),
     new WebpackCleanupPlugin(),
     new webpack.DefinePlugin({
@@ -69,6 +71,7 @@ module.exports = {
     }),
     new ServiceWorkerPlugin({
       entry: path.join(__dirname, "../service-worker.js")
-    })
+    }),
+    new CopyWebpackPlugin([{ from: "./src/templates/manifest.json" }])
   ]
 };

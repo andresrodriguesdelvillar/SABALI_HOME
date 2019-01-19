@@ -21,16 +21,21 @@ process.env.SECRET_KEY = SECRET_KEY;
 //--- mongoose Model---
 import User from "../models/user";
 // initialize route
-const route = express.Router();
+const user = express.Router();
 // use cors for route
-route.use(cors());
+user.use(cors());
 
 // external custom functions
 
 import { validateEmail, validatePassword } from "../../customFuncs/validation";
+import { arrayIncludes } from "../customFuncs/checks";
+import {
+  SendConfMail,
+  SendResetPassMail,
+  testTemplate
+} from "../customFuncs/SendMail";
 
-import { SendMail } from "../customFuncs/Nodemaile";
-import { resolve } from "url";
+import { BaseUrl } from "../../config/Host";
 
 // ROUTES
 
@@ -39,10 +44,17 @@ import { resolve } from "url";
 @desc    Register a user
 @access  Public
 @requires: Email, Password, PasswordConf
-@optional: Name, Company
- */
+@optional: Name, Company -- can be empty, but are required
+*/
 
-route.post("/register", (req, res) => {
+// registers the user in DB with email confirmation = false
+user.post("/register", (req, res, next) => {
+  const requires = ["Email", "Password", "PasswordConf", "Name", "Company"];
+  if (!arrayIncludes(requires, Object.keys(req.body))) {
+    console.log("register1");
+    res.status(400).send({ error: "bad request" });
+    return;
+  }
   const UserInfo = {
     Email: req.body.Email,
     Name: req.body.Name,
@@ -50,6 +62,7 @@ route.post("/register", (req, res) => {
     Password: req.body.Password,
     PasswordConf: req.body.PasswordConf
   };
+
   const error = {};
   // check if userInfo is valid
   const checks = {
@@ -68,15 +81,15 @@ route.post("/register", (req, res) => {
     // => hash password
     bcrypt.genSalt(10, (err, salt) => {
       if (err) {
-        res.status(400).send({ error: err });
+        res.status(500).send({ error: err });
       } else {
         bcrypt.hash(UserInfo.Password, salt, (err, hash) => {
           if (err) {
-            res.status(400).send({ error: err });
+            res.status(500).send({ error: err });
           } else {
             // User Information to store in DB
             const ToStore = {
-              Email: UserInfo.Email,
+              Email: UserInfo.Email.toLowerCase(),
               Name: UserInfo.Name,
               Company: UserInfo.Company,
               Password: hash
@@ -84,9 +97,57 @@ route.post("/register", (req, res) => {
             // check if user exists (by Email)
             User.findOne({ Email: ToStore.Email }).then(user => {
               if (user) {
-                res
-                  .status(400)
-                  .send({ error: "The Email is already registered" });
+                // TODO has to be corrected for final deploy
+                if (process.env.NODE_ENV === "production") {
+                  res.status(200).send({
+                    error: "The Email is already registered",
+                    success: false
+                  });
+                } else {
+                  User.deleteOne({ Email: ToStore.Email })
+                    .then(response => {
+                      console.log(response);
+                    })
+                    .catch(err => {
+                      console.log(err);
+                    });
+                  User.create(ToStore)
+                    .then(response => {
+                      const payload = {
+                        Email: response.Email,
+                        Password: response.Password,
+                        ID: response._id
+                      };
+                      let token = jwt.sign(payload, process.env.SECRET_KEY, {
+                        expiresIn: 1440
+                      });
+                      const Link =
+                        req.protocol +
+                        "://" +
+                        req.get("host") +
+                        "/user/confirmaccount/" +
+                        token;
+                      SendConfMail(req.body.Email, Link)
+                        .then(messageId => {
+                          console.log(messageId);
+                          res.status(200).send({
+                            messageId: messageId.messageId,
+                            success: true
+                          });
+                        })
+                        .catch(err => {
+                          console.log(err);
+                          res.status(500).send({ error: err, success: false });
+                        });
+                    })
+                    .catch(err => {
+                      res.status(404).send({
+                        error: err,
+                        msg: "error while registering user",
+                        success: false
+                      });
+                    });
+                }
               } else {
                 // if user does not exist create new user
                 User.create(ToStore)
@@ -94,8 +155,7 @@ route.post("/register", (req, res) => {
                     const payload = {
                       Email: response.Email,
                       Password: response.Password,
-                      ID: response._id,
-                      type: "confirm"
+                      ID: response._id
                     };
                     let token = jwt.sign(payload, process.env.SECRET_KEY, {
                       expiresIn: 1440
@@ -104,14 +164,26 @@ route.post("/register", (req, res) => {
                       req.protocol +
                       "://" +
                       req.get("host") +
-                      "/user/sendemail/" +
+                      "/user/confirmaccount/" +
                       token;
-                    res.status(202).redirect(Link);
+                    SendConfMail(req.body.Email, Link)
+                      .then(messageId => {
+                        res.status(200).send({
+                          messageId: messageId.messageId,
+                          success: true
+                        });
+                      })
+                      .catch(err => {
+                        console.log(err);
+                        res.status(500).send({ error: err, success: false });
+                      });
                   })
                   .catch(err => {
-                    res
-                      .status(404)
-                      .send(`Error while registering User: ${err}`);
+                    res.status(400).send({
+                      error: err,
+                      msg: "error while registering user",
+                      success: false
+                    });
                   });
               }
             });
@@ -122,47 +194,109 @@ route.post("/register", (req, res) => {
   }
 });
 
-route.get("/sendemail/:token", (req, res) => {
-  const decoded = jwt.verify(req.params["token"], process.env.SECRET_KEY);
-  // confirm email
-  if (decoded.type === "confirm") {
-    const payload = {
-      Email: decoded.Email,
-      Password: decoded.Password,
-      ID: decoded.ID
-    };
-    const token = jwt.sign(payload, process.env.SECRET_KEY, {
-      expiresIn: 1440
-    });
-    // Link for email confirmation
-    const Link =
-      req.protocol + "://" + req.get("host") + "/user/confirmaccount/" + token;
-    // Send email with nodemailer
-    SendMail(decoded.Email, Link)
-      .then(email => {
-        console.log(email);
-        res.status(200).send(email);
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(404).send({ error: err });
-      });
-  }
-});
+/*
+@route   GET /user/confirmaccount/:token
+@desc    confirm email
+@access  Public
+@requires in token: Email, hashedPassword, _id
+*/
 
-route.get("/confirmaccount/:token", (req, res) => {
+user.get("/confirmaccount/:token", (req, res) => {
   const decoded = jwt.verify(req.params["token"], process.env.SECRET_KEY);
   User.findOneAndUpdate(
     { _id: decoded.ID },
     { Confirmed: true },
     (err, response) => {
       if (err) {
-        res.status(400).send({ error: err });
+        res.status(400).send({ error: err, success: false });
       } else {
-        res.status(202).send(response);
+        console.log("email confirmed");
+        res.status(200).redirect(BaseUrl + "/login?confirmed=true");
       }
     }
   );
 });
 
-export default route;
+/*
+@route   POST /user/login
+@desc    Login a user
+@access  Public
+@requires: Email, Password
+*/
+
+user.post("/login", (req, res) => {
+  const requires = ["Email", "Password"];
+  if (!arrayIncludes(requires, Object.keys(req.body))) {
+    res.status(400).send({ error: "bad request" });
+    return;
+  }
+  const params = {
+    Email: req.body.Email,
+    Password: req.body.Password
+  };
+  User.findOne({ Email: params.Email }).then(user => {
+    if (!user) {
+      res.status(400).send({ success: false });
+    } else if (!user.Confirmed) {
+      res.status(400).send({ success: false, error: "email not confirmed" });
+    } else {
+      bcrypt.compare(params.Password, user.Password).then(result => {
+        if (!result) {
+          res.status(400).send({ success: false });
+        } else if (result) {
+          res.status(202).send({ success: true });
+        } else {
+          res.status(400).send({ success: false });
+        }
+      });
+    }
+  });
+});
+
+/*
+@route   POST /user/resetpassword
+@desc    reset password
+@access  Public
+@requires: Email
+*/
+
+user.post("/resetpassword/send", (req, res) => {
+  const requires = ["Email"];
+  if (!arrayIncludes(requires, Object.keys(req.body))) {
+    res.status(400).send({ error: "bad request" });
+    return;
+  }
+  const payload = {
+    Email: req.body.Email
+  };
+  let token = jwt.sign(payload, process.env.SECRET_KEY, {
+    expiresIn: 1440
+  });
+  const Link =
+    req.protocol +
+    "://" +
+    req.get("host") +
+    "/user/resetpassword/reset/" +
+    token;
+  SendResetPassMail(req.body.Email, Link)
+    .then(result => {
+      res.status(200).send({ success: true });
+    })
+    .catch(err => {
+      res.status(400).send({ success: false, error: err });
+    });
+});
+
+user.get("/testing", (req, res) => {
+  testTemplate()
+    .then(result => {
+      console.log(result);
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.send(err);
+    });
+});
+
+export default user;

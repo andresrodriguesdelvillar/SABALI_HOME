@@ -11,8 +11,10 @@ export const mouseParallax = (position, layers, maxMove) => {
     document.getElementById(layer).style.transform = `translate(${(position.x *
       maxMove *
       layers[layer][0]) /
-      window.innerWidth}px, ${(position.y * maxMove * layers[layer][1]) /
-      window.innerHeight}px)`;
+      window.innerWidth -
+      window.innerWidth / 20}px, ${(position.y * maxMove * layers[layer][1]) /
+      window.innerHeight -
+      window.innerHeight / 20}px)`;
   }
 };
 

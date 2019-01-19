@@ -9,6 +9,7 @@ import "./App.scss";
 import Home from "./Home";
 import LatestWork from "./LatestWork";
 import Admin from "./Admin";
+import Register from "./Register";
 
 class App extends Component {
   state = {
@@ -40,6 +41,7 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/latestwork/" exact component={LatestWork} />
             <Route path="/admin/" exact component={Admin} />
+            <Route path="/register/" exact component={Register} />
           </Switch>
         </div>
       </Router>

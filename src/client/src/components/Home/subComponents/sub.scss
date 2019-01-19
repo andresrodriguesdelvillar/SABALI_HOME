@@ -10,7 +10,7 @@
   }
 
   #layer1 {
-    z-index: 5;
+    z-index: -2;
 
     position: absolute;
     top: 0;
@@ -22,19 +22,19 @@
   }
 
   #layer2 {
-    z-index: 4;
+    z-index: -3;
     position: absolute;
     top: 0;
   }
 
   #layer3 {
-    z-index: 3;
+    z-index: -4;
     position: absolute;
     top: 0;
   }
 
   #layer4 {
-    z-index: 2;
+    z-index: -5;
     position: absolute;
     top: 0;
   }

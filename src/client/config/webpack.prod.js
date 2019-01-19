@@ -56,7 +56,6 @@ module.exports = {
     ]
   },
   mode: "production",
-  target: "node",
   plugins: [
     new HtmlWebpackPlugin({
       template: htmlTemplate,

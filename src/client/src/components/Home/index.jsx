@@ -26,6 +26,9 @@ class Home extends Component {
   render() {
     return (
       <div className="Homecontainer">
+        {/* <Link to="/register" id="link">
+          register
+        </Link> */}
         <Backgrund />
       </div>
     );

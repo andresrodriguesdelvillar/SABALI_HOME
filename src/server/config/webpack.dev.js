@@ -28,6 +28,6 @@ module.exports = {
   mode: "development",
   target: "node",
   plugins: [
-    new NodemonPlugin() // Dong
+    new NodemonPlugin({}) // Dong
   ]
 };

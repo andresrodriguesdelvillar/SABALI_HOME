@@ -1,47 +1,55 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-import mainContext from "../contexts/mainContext";
-import { userLocation } from "../customFuncs/main";
 import { isMobile } from "react-device-detect";
+
+// context
+import mainContext from "../contexts/mainContext";
+
+// custom functions
+
 import "./App.scss";
 
 import Home from "./Home";
-import LatestWork from "./LatestWork";
-import Admin from "./Admin";
+//const Register = React.lazy(() => import("./Register"));
 import Register from "./Register";
 
 class App extends Component {
   state = {
     userLocation: "USA"
   };
-  componentWillMount() {
-    this.context.mobile = isMobile;
-    this.userLocation();
+  componentDidMount() {
+    this.context.isMobile = isMobile;
+
+    this.userLocation()
+      .then(response => {
+        this.context.user.location = response.country;
+        if (response.languages === "de") {
+          this.context.user.language = "de";
+        } else if (response.languages === "nl") {
+          this.context.user.language = "nl";
+        } else if (response.languages === "es") {
+          this.context.user.language = "es";
+        } else {
+          this.context.user.language = "en";
+        }
+      })
+      .catch(() => {
+        this.context.user.location = "USA";
+        this.context.user.language = "en";
+      });
   }
 
   userLocation = () => {
-    fetch("https://ipapi.co/json")
-      .then(res => res.json())
-      .then(response => {
-        this.setState({ userLocation: response.country });
-        console.log(response);
-      })
-      .catch(() => {
-        this.setState({ userLocation: "USA" });
-      });
+    return fetch("https://ipapi.co/json").then(res => res.json());
   };
 
   render() {
-    this.context.userLocation = this.state.userLocation;
     return (
       <Router>
         <div className="App">
           <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/latestwork/" exact component={LatestWork} />
-            <Route path="/admin/" exact component={Admin} />
-            <Route path="/register/" exact component={Register} />
+            <Route path="/register" exact component={Register} />
           </Switch>
         </div>
       </Router>

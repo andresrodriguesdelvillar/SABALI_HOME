@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 // } from "./subComponents/functional";
 
 import Backgrund from "./subComponents/background";
-
+//const Backgrund = React.lazy(() => import("./subComponents/background"));
 import "./Home.scss";
 
 //const latestWorkLogo = require("./assets/like.png");
@@ -26,9 +26,9 @@ class Home extends Component {
   render() {
     return (
       <div className="Homecontainer">
-        {/* <Link to="/register" id="link">
+        <Link to="/register" id="link">
           register
-        </Link> */}
+        </Link>
         <Backgrund />
       </div>
     );

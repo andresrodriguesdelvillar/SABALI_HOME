@@ -3,6 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 const WebpackCleanupPlugin = require("webpack-cleanup-plugin");
+const webpack = require("webpack");
 
 //__________ Paths_______________
 
@@ -24,10 +25,11 @@ module.exports = {
   entry: entry,
   output: {
     path: dist,
-    filename: "client.bundle.js"
+    filename: "client.bundle.js",
+    publicPath: "/"
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx", ".ts", ".tsx", ".jpg", ".png"]
+    extensions: ["*", ".js", ".jsx"]
   },
   module: {
     rules: [
@@ -64,9 +66,6 @@ module.exports = {
   },
   mode: "development",
   devtool: "source-map",
-  devServer: {
-    historyApiFallback: true
-  },
   plugins: [
     new HtmlWebpackPlugin({
       template: htmlTemplate,

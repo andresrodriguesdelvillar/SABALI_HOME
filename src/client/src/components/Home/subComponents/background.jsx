@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 
+//context
 import mainContext from "../../../contexts/mainContext";
 
+// customFuncs
 import {
   getMousePosition,
   mouseParallax,
   getOrientation,
   mobileParallax
-} from "../../../customFuncs/deviceOrientation";
+} from "../../../custom/deviceOrientation";
 
 import "./sub.scss";
 
@@ -17,16 +19,13 @@ const img3 = require("../assets/ocean-klein.png");
 const img4 = require("../assets/sky-klein.jpg");
 
 class Background extends Component {
-  state = {
-    orientation: {}
-  };
-
   componentDidMount() {
     // check if mobile
+    console.log(this.context);
     if (this.context.mobile) {
       console.log("is Mobile");
       // add Eventlistener for mobile device tilt
-      window.addEventListener(
+      document.addEventListener(
         "deviceorientation",
         this.deviceOrientation,
         true
@@ -34,7 +33,19 @@ class Background extends Component {
     } else {
       console.log("is not mobile");
       // add Eventlistener for mouseMovement on desktop
-      window.addEventListener("mousemove", this.mouseParallax, true);
+      document.addEventListener("mousemove", this.mouseParallax, true);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.context.mobile) {
+      document.removeEventListener(
+        "deviceorientation",
+        this.deviceOrientation,
+        true
+      );
+    } else {
+      document.removeEventListener("mousemove", this.mouseParallax, true);
     }
   }
 
@@ -46,7 +57,7 @@ class Background extends Component {
       layer3: [-16, -16],
       layer4: [-9, -9]
     };
-    mouseParallax(mousePosition, layers, 5);
+    mouseParallax(mousePosition, layers, 2);
   };
 
   deviceOrientation = e => {
@@ -57,11 +68,10 @@ class Background extends Component {
       layer3: [-16, -16],
       layer4: [-9, -9]
     };
-    mobileParallax(orientation, window.screen.orientation.type, 5, layers);
+    mobileParallax(orientation, window.screen.orientation.type, 2, layers);
   };
 
   render() {
-    console.log(this.context.userLocation);
     return (
       <div id="Background" name="Background">
         <div id="layer1">

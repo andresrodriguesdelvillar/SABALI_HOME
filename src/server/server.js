@@ -7,6 +7,7 @@ express
 mongoose
 cors
 body-parser
+
 */
 
 import express from "express";
@@ -55,6 +56,7 @@ connect(
   .catch(err => console.log(err));
 
 // ROUTES
+
 import Users from "./routes/Users";
 
 app.use("/user", Users);
@@ -66,7 +68,7 @@ if (process.env.NODE_ENV === "production") {
   app.get("/sw.js", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client/", "sw.js"));
   });
-  app.get("*", (req, res) => {
+  app.get("/*", (req, res) => {
     res.sendFile(resolve("client/", "index.html"), err => {
       if (err) {
         res.status(500).send(err);

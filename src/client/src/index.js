@@ -1,6 +1,9 @@
 import React from "react";
 import { render } from "react-dom";
+
+// contextHelper();
 import App from "./components/App.jsx";
+
 // import * as serviceWorker from "../service-worker";
 
 render(<App />, document.getElementById("root"));

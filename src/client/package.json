@@ -15,12 +15,15 @@
   "author": "Vindao (Vincent Schmitt)",
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@material-ui/core": "^3.9.0",
     "jwt-decode": "^2.2.0",
     "react": "^16.6.3",
     "react-device-detect": "^1.6.1",
     "react-dom": "^16.6.3",
-    "react-router-dom": "^4.3.1"
+    "react-loadable": "^5.5.0",
+    "react-router-dom": "^4.3.1",
+    "react-spinner-material": "^1.0.19"
   },
   "babel": {
     "presets": [
@@ -29,9 +32,11 @@
     ],
     "plugins": [
       "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-object-rest-spread"
+      "@babel/plugin-proposal-object-rest-spread",
+      "@babel/plugin-syntax-dynamic-import"
     ]
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.2.1",

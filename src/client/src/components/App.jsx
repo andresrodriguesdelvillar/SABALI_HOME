@@ -1,62 +1,44 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { isMobile } from "react-device-detect";
 
-// context
-import mainContext from "../contexts/mainContext";
+import Loadable from "react-loadable";
 
 // custom functions
 
 import "./App.scss";
 
+import Loading from "./Loading";
 import Home from "./Home";
-//const Register = React.lazy(() => import("./Register"));
-import Register from "./Register";
+import ContextHelper from "../contexts/contextHelper";
+// const Home = Loadable({
+//   loader: () => import("./Home"),
+//   loading: Loading
+// });
+const Register = Loadable({
+  loader: () => import("./User/Register"),
+  loading: Loading
+});
+const ConfirmEmail = Loadable({
+  loader: () => import("./User/Stateless").ConfirmEmail,
+  loading: Loading
+});
+//import Register from "./Register";
 
 class App extends Component {
-  state = {
-    userLocation: "USA"
-  };
-  componentDidMount() {
-    this.context.isMobile = isMobile;
-
-    this.userLocation()
-      .then(response => {
-        this.context.user.location = response.country;
-        if (response.languages === "de") {
-          this.context.user.language = "de";
-        } else if (response.languages === "nl") {
-          this.context.user.language = "nl";
-        } else if (response.languages === "es") {
-          this.context.user.language = "es";
-        } else {
-          this.context.user.language = "en";
-        }
-      })
-      .catch(() => {
-        this.context.user.location = "USA";
-        this.context.user.language = "en";
-      });
-  }
-
-  userLocation = () => {
-    return fetch("https://ipapi.co/json").then(res => res.json());
-  };
-
   render() {
     return (
       <Router>
         <div className="App">
+          <ContextHelper />
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/register" exact component={Register} />
+            <Route path="/confirmemail" exact component={ConfirmEmail} />
           </Switch>
         </div>
       </Router>
     );
   }
 }
-
-App.contextType = mainContext;
 
 export default App;

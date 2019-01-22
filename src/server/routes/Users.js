@@ -49,6 +49,7 @@ import { BaseUrl } from "../../config/Host";
 
 // registers the user in DB with email confirmation = false
 user.post("/register", (req, res, next) => {
+  console.log(req.body);
   const requires = ["Email", "Password", "PasswordConf", "Name", "Company"];
   if (!arrayIncludes(requires, Object.keys(req.body))) {
     console.log("register1");
@@ -97,57 +98,10 @@ user.post("/register", (req, res, next) => {
             // check if user exists (by Email)
             User.findOne({ Email: ToStore.Email }).then(user => {
               if (user) {
-                // TODO has to be corrected for final deploy
-                if (process.env.NODE_ENV === "production") {
-                  res.status(200).send({
-                    error: "The Email is already registered",
-                    success: false
-                  });
-                } else {
-                  User.deleteOne({ Email: ToStore.Email })
-                    .then(response => {
-                      console.log(response);
-                    })
-                    .catch(err => {
-                      console.log(err);
-                    });
-                  User.create(ToStore)
-                    .then(response => {
-                      const payload = {
-                        Email: response.Email,
-                        Password: response.Password,
-                        ID: response._id
-                      };
-                      let token = jwt.sign(payload, process.env.SECRET_KEY, {
-                        expiresIn: 1440
-                      });
-                      const Link =
-                        req.protocol +
-                        "://" +
-                        req.get("host") +
-                        "/user/confirmaccount/" +
-                        token;
-                      SendConfMail(req.body.Email, Link)
-                        .then(messageId => {
-                          console.log(messageId);
-                          res.status(200).send({
-                            messageId: messageId.messageId,
-                            success: true
-                          });
-                        })
-                        .catch(err => {
-                          console.log(err);
-                          res.status(500).send({ error: err, success: false });
-                        });
-                    })
-                    .catch(err => {
-                      res.status(404).send({
-                        error: err,
-                        msg: "error while registering user",
-                        success: false
-                      });
-                    });
-                }
+                res.status(200).send({
+                  error: "The Email is already registered",
+                  success: false
+                });
               } else {
                 // if user does not exist create new user
                 User.create(ToStore)
@@ -168,9 +122,18 @@ user.post("/register", (req, res, next) => {
                       token;
                     SendConfMail(req.body.Email, Link)
                       .then(messageId => {
-                        res.status(200).send({
+                        delete payload.ID;
+                        const queryToken = jwt.sign(
+                          payload,
+                          process.env.SECRET_KEY,
+                          {
+                            expiresIn: 1440
+                          }
+                        );
+                        res.status(202).send({
                           messageId: messageId.messageId,
-                          success: true
+                          success: true,
+                          token: queryToken
                         });
                       })
                       .catch(err => {

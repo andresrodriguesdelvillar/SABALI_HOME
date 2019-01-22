@@ -33,10 +33,10 @@ export const validateConfPass = (password, confPass) => {
 
 export const validateName = name => {
   const error = [];
-  if (name.length < 3) {
+  if (name.length < 3 && name.length !== 0) {
     error.push("length");
   }
-  const re = /^[\w-_.]*$/;
+  const re = /^[\w-_.&]*$/;
   if (!re.test(name)) {
     error.push("symbols");
   }
@@ -45,7 +45,7 @@ export const validateName = name => {
 
 export const validateCompany = company => {
   const error = [];
-  const re = /^[\w-_.]*$/;
+  const re = /^[\w-_.&]*$/;
   if (!re.test(company)) {
     error.push("symbols");
   }

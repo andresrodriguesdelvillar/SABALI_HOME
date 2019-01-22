@@ -1,35 +1,31 @@
 // general imports
 import React, { Component } from "react";
 
-import { FormControl, TextField, Button } from "@material-ui/core";
+import { FormControl, TextField, Button, Select } from "@material-ui/core";
 
 // style
 import "./style.scss";
 
 //custom Imports
-import { register } from "../../custom/language";
+import { register } from "../../../custom/language";
 import {
   validateEmail,
   validatePassword,
   validateConfPass,
   validateName,
   validateCompany
-} from "../../../../customFuncs/validation";
-
-import { nameErrors, companyErrors } from "../../custom/registerErrorTexts";
+} from "../../../../../customFuncs/validation";
 
 //context
-import mainContext from "../../contexts/mainContext";
+import mainContext from "../../../contexts/mainContext";
 
 class Register extends Component {
   state = {
-    formInputs: {
-      Name: "",
-      Company: "",
-      Email: "",
-      Password: "",
-      Confpass: ""
-    },
+    formInputName: "",
+    formInputCompany: "",
+    formInputEmail: "",
+    formInputPassword: "",
+    formInputConfPass: "",
     form: {},
     nameErrors: {
       length: false,
@@ -53,24 +49,41 @@ class Register extends Component {
 
   componentWillMount() {
     if (this.context.user.language === "de") {
-      this.setState({ form: register.deutsch });
+      this.setState({ form: register.de });
     } else if (this.context.user.language === "nl") {
-      this.setState({ form: register.nederlands });
+      this.setState({ form: register.nl });
     } else if (this.context.user.language === "es") {
-      this.setState({ form: register.espanol });
+      this.setState({ form: register.es });
     } else {
-      this.setState({ form: register.english });
+      this.setState({ form: register.en });
     }
   }
 
-  Submit = () => {
-    console.log(this.state);
+  Submit = e => {
+    e.preventDefault();
+    const formData = {
+      Email: this.state.formInputEmail,
+      Password: this.state.formInputPassword,
+      PasswordConf: this.state.formInputConfPass,
+      Name: this.state.formInputName,
+      Company: this.state.formInputCompany
+    };
+    this.context.fetch
+      .register(formData)
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          this.props.history.push("/confirmemail?" + res.token);
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   onChange = e => {
     e.preventDefault();
+    const formInputToChange = "formInput" + e.target.id;
     this.setState({
-      formInputs: { ...this.state.formInputs, [e.target.id]: e.target.value }
+      [formInputToChange]: e.target.value
     });
     // Name
     if (e.target.id === "Name") {
@@ -85,9 +98,7 @@ class Register extends Component {
         }
         this.setState({ nameErrors: errorState });
       } else {
-        this.setState({
-          nameErrors: { nameErrors: { length: false, symbols: false } }
-        });
+        this.setState({ nameErrors: { length: false, symbols: false } });
       }
     }
     // Company
@@ -102,9 +113,7 @@ class Register extends Component {
         }
         this.setState({ companyErrors: errorState });
       } else {
-        this.setState({
-          companyErrors: { companyErrors: { symbols: false } }
-        });
+        this.setState({ companyErrors: { symbols: false } });
       }
     }
     // Email
@@ -113,9 +122,7 @@ class Register extends Component {
       if (validation !== true) {
         this.setState({ emailErrors: { valid: true } });
       } else {
-        this.setState({
-          emailErrors: { emailErrors: { valid: false } }
-        });
+        this.setState({ emailErrors: { valid: false } });
       }
     }
     // Password
@@ -133,16 +140,14 @@ class Register extends Component {
         this.setState({ passwordErrors: errorState });
       } else {
         this.setState({
-          passwordErrors: {
-            passwordErrors: { length: false, symbol: false, uppercase: false }
-          }
+          passwordErrors: { length: false, symbol: false, uppercase: false }
         });
       }
     }
     // Password confirmation
     else if (e.target.id === "ConfPass") {
       const validation = validateConfPass(
-        this.state.formInputs.Password,
+        this.state.formInputPassword,
         e.target.value
       );
       if (validation !== true) {
@@ -155,14 +160,53 @@ class Register extends Component {
     }
   };
 
+  changeLang = e => {
+    this.setState({ form: register[e.target.value] });
+    this.context.user.language = e.target.value;
+  };
+
+  disable_submit_button = e => {
+    console.log(e);
+  };
+
+  handle_Submit_disabling = () => {
+    const toCheck = [
+      "nameErrors",
+      "companyErrors",
+      "emailErrors",
+      "passwordErrors",
+      "confPassErrors"
+    ];
+    for (let i in toCheck) {
+      for (let error in this.state[toCheck[i]]) {
+        if (this.state[toCheck[i]][error]) {
+          return true;
+        }
+      }
+    }
+    if (
+      this.state.formInputEmail === "" ||
+      this.state.formInputPassword === "" ||
+      this.state.formInputConfPass === ""
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     const formLabels = this.state.form;
-    const nameErrors = () => {
-      let to_return = [];
-      for (let error in this.state.nameErrors) {
-        if (this.state.nameErrors[error] === true) {
+    // ____ERROR display____
+
+    const printError = type => {
+      const to_return = [];
+      const string = type + "Errors";
+      for (let error in this.state[string]) {
+        if (this.state[string][error]) {
           to_return.push(
-            <span key={error + 0}>{formLabels.name.errors[error]}</span>
+            <span style={{ color: "#FF9494" }} key={error + 0}>
+              {formLabels[type].errors[error]}
+            </span>
           );
           to_return.push(<br key={error + 1} />);
         }
@@ -170,75 +214,60 @@ class Register extends Component {
       to_return.pop();
       return to_return.length === 0 ? "" : to_return;
     };
-    const companyErrors = () => {
-      if (this.state.companyErrors.symbols) {
-        return formLabels.company.errors.symbols;
-      } else {
-        return "";
-      }
-    };
-    const emailErrors = () => {
-      if (this.state.emailErrors.valid) {
-        return formLabels.email.errors.default;
-      } else {
-        return "";
-      }
-    };
-    const passwordErrors = () => {
-      let to_return = [];
-      for (let error in this.state.passwordErrors) {
-        if (this.state.passwordErrors[error] === true) {
-          to_return.push(
-            <span key={error + 0}>{formLabels.password.errors[error]}</span>
-          );
-          to_return.push(<br key={error + 1} />);
-        }
-      }
-      to_return.pop();
-      return to_return.length === 0 ? "" : to_return;
-    };
-    const confPassErrors = () => {
-      if (this.state.confPassErrors.match) {
-        return formLabels.confPass.errors.default;
-      } else {
-        return "";
-      }
-    };
+
     return (
       <div id="register">
         <div className="container">
+          <Select
+            value={this.context.user.language}
+            name="language"
+            id="language"
+            style={{ float: "right", display: "box" }}
+            onChange={this.changeLang}
+            native={true}
+            fullWidth={false}
+          >
+            <option value="en">english</option>
+            <option value="de">deutsch</option>
+            <option value="es">español</option>
+            <option value="nl">nederlands</option>
+          </Select>
           <h1>{formLabels.title}</h1>
-          <form noValidate>
+
+          <form noValidate onSubmit={this.Submit}>
             <FormControl fullWidth>
               <TextField
-                helperText={nameErrors()}
+                helperText={printError("name")}
                 id="Name"
                 label={formLabels.name.label ? formLabels.name.label : "Name"}
                 onChange={this.onChange}
               />
               <TextField
-                helperText={companyErrors()}
+                helperText={printError("company")}
                 id="Company"
                 label={formLabels.company.label}
                 onChange={this.onChange}
               />
               <TextField
-                helperText={emailErrors()}
+                helperText={printError("email")}
                 required
+                type="email"
                 id="Email"
                 label={formLabels.email.label}
                 onChange={this.onChange}
               />
               <TextField
-                helperText={passwordErrors()}
+                helperText={printError("password")}
                 required
+                type="password"
                 id="Password"
                 label={formLabels.password.label}
                 onChange={this.onChange}
               />
               <TextField
                 required
-                helperText={confPassErrors()}
+                helperText={printError("confPass")}
+                type="password"
                 id="ConfPass"
                 label={formLabels.confPass.label}
                 onChange={this.onChange}
@@ -248,7 +277,7 @@ class Register extends Component {
                 id="register_submit"
                 variant="contained"
                 color="primary"
-                onClick={this.Submit}
+                disabled={this.handle_Submit_disabling()}
               >
                 {formLabels.submitButton ? formLabels.submitButton : "Register"}
               </Button>

@@ -1,24 +1,24 @@
 export const register = {
-  english: {
+  en: {
     title: "Register",
     name: {
       label: "Name",
       errors: {
         length: "the name needs to be at least 3 characters long",
         symbols:
-          "the name can only contain latin-letters and the following symbols (_, -, &)"
+          "the name can only contain latin-letters and the following symbols (_, -, ., &)"
       }
     },
     company: {
       label: "Company",
       errors: {
         symbols:
-          "the company name can only contain latin-letters and the following symbols (_, -, &)"
+          "the company name can only contain latin-letters and the following symbols (_, -, ., &)"
       }
     },
     email: {
       label: "Email",
-      errors: { default: "That is not a valid Email adress" }
+      errors: { valid: "That is not a valid Email adress" }
     },
     password: {
       label: "Password",
@@ -31,31 +31,31 @@ export const register = {
     confPass: {
       label: "Confirm Password",
       errors: {
-        default: "The password confirmation does not match the password"
+        match: "The password confirmation does not match the password"
       }
     },
     submitButton: "Register"
   },
-  deutsch: {
+  de: {
     title: "Anmelden",
     name: {
       label: "Name",
       errors: {
         length: "Der Name muss mindestens 3 Zeichen enthalten",
         symbols:
-          "Der Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, &)"
+          "Der Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, ., &)"
       }
     },
     company: {
       label: "Firma",
       errors: {
         symbols:
-          "Der Firmen-Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, &)"
+          "Der Firmen-Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, ., &)"
       }
     },
     email: {
       label: "Email",
-      errors: { default: "Das ist keine gültige Email adresse" }
+      errors: { valid: "Das ist keine gültige Email adresse" }
     },
     password: {
       label: "Passwort",
@@ -69,31 +69,31 @@ export const register = {
     confPass: {
       label: "Passwort Bestätigung",
       errors: {
-        default: "Die Passwörter stimmen nicht überein"
+        match: "Die Passwörter stimmen nicht überein"
       }
     },
     submitButton: "Anmelden"
   },
-  nederlands: {
+  nl: {
     title: "Registreren",
     name: {
       label: "Naam",
       errors: {
         length: "De naam moet tenminst 3 karaters bevatten",
         symbols:
-          "De naam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, &)"
+          "De naam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, ., &)"
       }
     },
     company: {
       label: "Bedrijf",
       errors: {
         symbols:
-          "De bedrijfsnaam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, &)"
+          "De bedrijfsnaam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, ., &)"
       }
     },
     email: {
       label: "Email",
-      errors: { default: "Dat is geen geldige Emailadres" }
+      errors: { valid: "Dat is geen geldige Emailadres" }
     },
     password: {
       label: "Wachtwoord",
@@ -106,18 +106,44 @@ export const register = {
     confPass: {
       label: "Wachtwoord bevestiging",
       errors: {
-        default: "De wachtwoorden komen niet overeen"
+        match: "De wachtwoorden komen niet overeen"
       }
     },
     submitButton: "Registreren"
   },
-  espanol: {
+  es: {
     title: "Register",
-    name: "Nombre",
-    company: "Empresa",
-    email: "Email",
-    password: "contraseña",
-    confPass: "confirmación de contraseña",
+    name: {
+      label: "Nombre",
+      errors: {
+        length: "El nombre requiere mínimo 3 caracteres",
+        symbols:
+          "El nombre de la compañia debe de consistir solamente de caracteres latinos o los símbolos (_, -, ., &)"
+      }
+    },
+    company: {
+      label: "Compañia",
+      errors: {
+        symbols:
+          "El nombre de la compañia debe de consistir solamente de caracteres latinos o los símbolos (_, -, ., &)"
+      }
+    },
+    email: {
+      label: "Email",
+      errors: { valid: "El correo electrónico no es valido" }
+    },
+    password: {
+      label: "contraseña",
+      errors: {
+        length: "La contraseña necesita mínimo 8 letras",
+        symbol: "La contraseña necesita por lo menos un numero o símbol",
+        uppercase: "La contraseña necesita por lo menos una letra mayúscula"
+      }
+    },
+    confPass: {
+      label: "confirmación de contraseña",
+      errors: { match: "La verificación de la contraseña no cuadra" }
+    },
     submitButton: "Register"
   }
 };

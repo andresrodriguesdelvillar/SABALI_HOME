@@ -3,37 +3,47 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Loadable from "react-loadable";
 
-// custom functions
-
+// style
 import "./App.scss";
 
+// Components
 import Loading from "./Loading";
-import Home from "./Home";
-import ContextHelper from "../contexts/contextHelper";
-// const Home = Loadable({
-//   loader: () => import("./Home"),
-//   loading: Loading
-// });
+const Home = Loadable({
+  loader: () => import("./Home"),
+  loading: Loading
+});
 const Register = Loadable({
   loader: () => import("./User/Register"),
   loading: Loading
 });
 const ConfirmEmail = Loadable({
-  loader: () => import("./User/Stateless").ConfirmEmail,
+  loader: () => import("./User/ConfirmEmailInfo"),
   loading: Loading
 });
-//import Register from "./Register";
-
+const ConfirmEmailError = Loadable({
+  loader: () => import("./User/ConfirmEmailError"),
+  loading: Loading
+});
+// const Login = Loadable({
+//   loader: () => import("./User/Login/Login"),
+//   loading: Loading
+// });
+import Login from "./User/Login";
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
-          <ContextHelper />
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/register" exact component={Register} />
+            <Route path="/login" exact component={Login} />
             <Route path="/confirmemail" exact component={ConfirmEmail} />
+            <Route
+              path="/confirmemailerror"
+              exact
+              component={ConfirmEmailError}
+            />
           </Switch>
         </div>
       </Router>

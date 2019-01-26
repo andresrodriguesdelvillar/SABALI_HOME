@@ -3,6 +3,9 @@ const webpack = require("webpack");
 
 const BaseDir = path.resolve(__dirname, "../", "../", "../");
 
+// --config
+const SECRET_KEY = require("../../config/secrets").SECRET_KEY;
+
 module.exports = {
   entry: ["@babel/polyfill", "./server.js"],
   output: {
@@ -21,6 +24,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env.SECRET_KEY": JSON.stringify(SECRET_KEY)
+    })
+  ],
   mode: "production",
   target: "node"
 };

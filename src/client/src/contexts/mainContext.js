@@ -1,38 +1,126 @@
-import { createContext } from "react";
+import React, { Component, createContext } from "react";
 
-export default createContext({
-  isMobile: false,
-  user: {
+import jwt from "jsonwebtoken";
+
+export const mainContext = createContext();
+import { isMobile } from "react-device-detect";
+
+const checkLocationAndLanguage = () => {
+  return fetch("https://ipapi.co/json").then(res => res.json());
+};
+
+class Provider extends Component {
+  state = {
+    isMobile: isMobile,
     location: "USA",
     language: "en",
-    loggedIn: false,
-    details: {
-      id: false,
-      name: false,
-      company: false,
-      email: false
-    }
-  },
-  fetch: {
-    register: body => {
-      console.log(body);
-      if (process.env.NODE_ENV === "production") {
-        return fetch("/user/register", {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          method: "POST",
-          body: JSON.stringify(body)
-        });
-      } else {
-        return fetch("http://localhost:5000/user/register", {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          method: "POST",
-          body: JSON.stringify(body)
-        });
+    user: {
+      loggedIn: false,
+      details: {
+        ID: false,
+        Name: false,
+        Company: false,
+        Email: false
+      }
+    },
+    fetch: {
+      post: (body, url) => {
+        if (process.env.NODE_ENV === "production") {
+          return fetch(url, {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(body)
+          });
+        } else {
+          return fetch("http://localhost:5000" + url, {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(body)
+          });
+        }
+      },
+      get: url => {
+        if (process.env.NODE_ENV === "production") {
+          return fetch(url);
+        } else {
+          return fetch("http://localhost:5000" + url);
+        }
       }
     }
+  };
+
+  componentWillMount() {
+    checkLocationAndLanguage()
+      .then(response => {
+        if (
+          response.languages === "de" ||
+          response.languages === "nl" ||
+          response.languages === "es"
+        ) {
+          this.setState({
+            location: response.country,
+            language: response.languages
+          });
+        } else {
+          this.setState({
+            location: response.country,
+            language: "en"
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ location: "USA", language: "en" });
+      });
+    if (localStorage.userToken) {
+      jwt.verify(
+        localStorage.userToken,
+        process.env.SECRET_KEY,
+        (err, decoded) => {
+          if (err) {
+            return;
+          } else {
+            this.setState({
+              user: {
+                loggedIn: true,
+                details: {
+                  ID: decoded.ID,
+                  Name: decoded.Name,
+                  Company: decoded.Company,
+                  Email: decoded.Email
+                }
+              }
+            });
+          }
+        }
+      );
+    }
   }
-});
+  updateMany = toUpdate => {
+    for (let i in toUpdate) {
+      this.update(toUpdate[i][0], toUpdate[i][1]);
+    }
+  };
+
+  update = (key, value) => {
+    this.setState({ [key]: value });
+  };
+  render() {
+    return (
+      <mainContext.Provider
+        value={{
+          ...this.state,
+          update: this.update,
+          updateMany: this.updateMany
+        }}
+      >
+        {this.props.children}
+      </mainContext.Provider>
+    );
+  }
+}
+
+export default Provider;

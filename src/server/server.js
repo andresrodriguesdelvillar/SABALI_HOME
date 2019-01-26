@@ -31,8 +31,7 @@ import { port } from "./config/main";
 import { mongoURI } from "./config/secrets";
 /* The file should have a setup of:
 module.exports = {
-  mongoURI: <personal mongoURI>,
-  SECRET_KEY: <personal Secret Key>
+  mongoURI: <personal mongoURI>
 } */
 
 // general CONFIGS

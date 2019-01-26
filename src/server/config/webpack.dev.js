@@ -3,6 +3,9 @@ const webpack = require("webpack");
 const NodemonPlugin = require("nodemon-webpack-plugin");
 const BaseDir = path.resolve(__dirname, "../", "../", "../");
 
+// --config
+const SECRET_KEY = require("../../config/secrets").SECRET_KEY;
+
 module.exports = {
   entry: ["@babel/polyfill", "./server.js"],
   output: {
@@ -28,6 +31,12 @@ module.exports = {
   mode: "development",
   target: "node",
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("development"),
+        SECRET_KEY: JSON.stringify(SECRET_KEY)
+      }
+    }),
     new NodemonPlugin({}) // Dong
   ]
 };

@@ -18,5 +18,8 @@
     "git": "git add . && git commit -m 'commit' && git push origin master"
   },
   "author": "Vindao (Vincent Schmitt)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^8.4.0"
+  }
 }

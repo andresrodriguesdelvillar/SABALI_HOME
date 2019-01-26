@@ -1,53 +1,46 @@
-export const validateEmail = email => {
-  const err = [];
-  const re = /[a-z0-9!#$%&'*+\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/;
-  if (!re.test(email)) {
-    err.push("valid");
-  }
-  return err.length === 0 ? true : err;
-};
-
-export const validatePassword = password => {
+export const validate = (type, toCheck1, toCheck2 = null) => {
   const error = [];
-  if (password.length < 8) {
-    error.push("length");
-  }
-  const re_upperCase = /[A-Z]/;
-  if (!re_upperCase.test(password)) {
-    error.push("uppercase");
-  }
-  const re_numOrSym = /[-!$%^&*()_+|~=`\[\]:";'<>?,.\/1-9]/;
-  if (!re_numOrSym.test(password)) {
-    error.push("symbol");
-  }
-  return error.length === 0 ? true : error;
-};
+  switch (type) {
+    case "Email":
+      const re_email = /[a-z0-9!#$%&'*+\/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9][a-z0-9-]*[a-z0-9]/;
+      if (!re_email.test(toCheck1)) {
+        error.push("valid");
+      }
+      break;
+    case "Password":
+      if (toCheck1.length < 8) {
+        error.push("length");
+      }
+      const re_upperCase = /[A-Z]/;
+      if (!re_upperCase.test(toCheck1)) {
+        error.push("uppercase");
+      }
+      const re_numOrSym = /[-!$%^&*()_+|~=`\[\]:";'<>?,.\/1-9]/;
+      if (!re_numOrSym.test(toCheck1)) {
+        error.push("symbol");
+      }
+      break;
+    case "Name":
+      if (toCheck1.length < 3 && toCheck1.length !== 0) {
+        error.push("length");
+      }
+      const re_name = /^[\w-_.&]*$/;
+      if (!re_name.test(toCheck1)) {
+        error.push("symbols");
+      }
+      break;
 
-export const validateConfPass = (password, confPass) => {
-  const error = [];
-  if (password !== confPass) {
-    error.push("match");
-  }
-  return error.length === 0 ? true : error;
-};
+    case "Company":
+      const re_company = /^[\w-_.&]*$/;
+      if (!re_company.test(toCheck1)) {
+        error.push("symbols");
+      }
+      break;
 
-export const validateName = name => {
-  const error = [];
-  if (name.length < 3 && name.length !== 0) {
-    error.push("length");
-  }
-  const re = /^[\w-_.&]*$/;
-  if (!re.test(name)) {
-    error.push("symbols");
-  }
-  return error.length === 0 ? true : error;
-};
-
-export const validateCompany = company => {
-  const error = [];
-  const re = /^[\w-_.&]*$/;
-  if (!re.test(company)) {
-    error.push("symbols");
+    case "ConfPass":
+      if (toCheck1 !== toCheck2) {
+        error.push("match");
+      }
   }
   return error.length === 0 ? true : error;
 };

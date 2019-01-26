@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 //context
-import mainContext from "../../../contexts/mainContext";
+import { mainContext } from "../../../contexts/mainContext";
 
 // customFuncs
 import {
@@ -21,8 +21,7 @@ const img4 = require("../assets/sky-klein.jpg");
 class Background extends Component {
   componentDidMount() {
     // check if mobile
-    console.log(this.context);
-    if (this.context.mobile) {
+    if (this.context.isMobile) {
       console.log("is Mobile");
       // add Eventlistener for mobile device tilt
       document.addEventListener(
@@ -38,7 +37,7 @@ class Background extends Component {
   }
 
   componentWillUnmount() {
-    if (this.context.mobile) {
+    if (this.context.isMobile) {
       document.removeEventListener(
         "deviceorientation",
         this.deviceOrientation,
@@ -63,6 +62,7 @@ class Background extends Component {
   deviceOrientation = e => {
     // creates Device-tilt Parallax
     const orientation = getOrientation(e);
+    this.setState({ deviceOrientation: orientation.tilt_horizontal });
     const layers = {
       layer2: [-32, -32],
       layer3: [-16, -16],
@@ -72,6 +72,7 @@ class Background extends Component {
   };
 
   render() {
+    console.log(this.context);
     return (
       <div id="Background" name="Background">
         <div id="layer1">

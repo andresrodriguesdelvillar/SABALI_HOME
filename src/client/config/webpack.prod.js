@@ -21,6 +21,7 @@ const entry = path.resolve(src, "index.js");
 const htmlTemplate = path.resolve(src, "templates/", "index.html");
 
 // --config
+const SECRET_KEY = require("../../config/secrets").SECRET_KEY;
 
 module.exports = {
   entry: entry,
@@ -64,9 +65,7 @@ module.exports = {
     }),
     new WebpackCleanupPlugin(),
     new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify("production")
-      }
+      "process.env.SECRET_KEY": JSON.stringify(SECRET_KEY)
     }),
     new ServiceWorkerPlugin({
       entry: path.join(__dirname, "../service-worker.js")

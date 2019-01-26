@@ -20,6 +20,7 @@ const entry = path.resolve(src, "index.js");
 const htmlTemplate = path.resolve(src, "templates/", "index.html");
 
 // --config
+const SECRET_KEY = require("../../config/secrets").SECRET_KEY;
 
 module.exports = {
   entry: entry,
@@ -72,6 +73,12 @@ module.exports = {
       inject: true
     }),
     new WebpackCleanupPlugin(),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("development"),
+        SECRET_KEY: JSON.stringify(SECRET_KEY)
+      }
+    }),
     new BrowserSyncPlugin({
       host: "localhost",
       port: 3000,

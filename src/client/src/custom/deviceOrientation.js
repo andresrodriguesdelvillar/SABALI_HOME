@@ -19,8 +19,8 @@ export const mouseParallax = (position, layers, maxMove) => {
 };
 
 export const getOrientation = e => {
-  const beta = event.beta;
-  const gamma = event.gamma;
+  const beta = e.beta;
+  const gamma = e.gamma;
 
   // JS math works in radians
   var betaR = (beta / 180) * Math.PI;
@@ -39,30 +39,31 @@ export const getOrientation = e => {
 
 export const mobileParallax = (orientaion, type, maxMove, layers) => {
   for (let layer in layers) {
-    if (type == "landscape-primary") {
-      document.getElementById(
-        layer
-      ).style.transform = `translate(${-orientaion.tilt_vertical *
-        layers[layer][1] *
-        maxMove}px, ${-orientaion.tilt_horizontal *
-        layers[layer][0] *
-        maxMove}px)`;
-    } else if (type == "landscape-secondary") {
-      document.getElementById(
-        layer
-      ).style.transform = `translate(${-orientaion.tilt_vertical *
-        layers[layer][1] *
-        maxMove}px, ${-orientaion.tilt_horizontal *
-        layers[layer][0] *
-        maxMove}px)`;
-    } else {
-      document.getElementById(
-        layer
-      ).style.transform = `translate(${orientaion.tilt_horizontal *
-        layers[layer][0] *
-        maxMove}px, ${orientaion.tilt_vertical_portrait *
-        layers[layer][1] *
-        maxMove}px)`;
+    switch (type) {
+      case "landscape-primary":
+        document.getElementById(
+          layer
+        ).style.transform = `translate(${-orientaion.tilt_vertical *
+          layers[layer][1] *
+          maxMove}px, ${-orientaion.tilt_horizontal *
+          layers[layer][0] *
+          maxMove}px)`;
+      case "landscape-secondary":
+        document.getElementById(
+          layer
+        ).style.transform = `translate(${-orientaion.tilt_vertical *
+          layers[layer][1] *
+          maxMove}px, ${-orientaion.tilt_horizontal *
+          layers[layer][0] *
+          maxMove}px)`;
+      default:
+        document.getElementById(
+          layer
+        ).style.transform = `translate(${orientaion.tilt_horizontal *
+          layers[layer][0] *
+          maxMove}px, ${orientaion.tilt_vertical_portrait *
+          layers[layer][1] *
+          maxMove}px)`;
     }
   }
 };

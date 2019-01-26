@@ -9,13 +9,10 @@ import { Link } from "react-router-dom";
 //   Contact,
 //   Team,
 //   LatestWork
-// } from "./subComponents/functional";
+// } from "./subComponents/functional"
+import Background from "./subComponents/background";
 
-import Backgrund from "./subComponents/background";
-//const Backgrund = React.lazy(() => import("./subComponents/background"));
 import "./Home.scss";
-
-//const latestWorkLogo = require("./assets/like.png");
 
 class Home extends Component {
   state = {};
@@ -26,10 +23,13 @@ class Home extends Component {
   render() {
     return (
       <div className="Homecontainer">
+        <Link to="/login" id="link">
+          login
+        </Link>
         <Link to="/register" id="link">
           register
         </Link>
-        <Backgrund />
+        <Background />
       </div>
     );
   }

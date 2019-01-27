@@ -12,6 +12,7 @@ import { mainContext } from "../../../contexts/mainContext";
 import { login } from "../../../custom/language";
 import { validate } from "../../../../../customFuncs/validation";
 import { errorColor, successColor } from "../../../custom/colors";
+import { queryString } from "../../../custom/helpers";
 
 class Login extends Component {
   state = {
@@ -23,16 +24,26 @@ class Login extends Component {
     resendConfMail: false,
     resendEmailMessage: { text: "", color: "" }
   };
-
+  componentWillMount() {
+    const email = queryString(this.props.location.search.substring(1)).email;
+    if (email) {
+      this.setState({ Email: email, disable_submit: false });
+    }
+  }
   componentDidUpdate() {
     if (this.state.resendConfMail) {
       document.getElementById("resendEmailLogin").style.display = "block";
+      document.getElementById("SubmitLoginButton").style.display = "none";
     } else {
       document.getElementById("resendEmailLogin").style.display = "none";
     }
   }
 
   onChange = e => {
+    if (this.state.resendConfMail) {
+      document.getElementById("SubmitLoginButton").style.display = "block";
+      this.setState({ resendConfMail: false });
+    }
     if (e.target.id === "Email") {
       if (validate("Email", e.target.value) !== true) {
         this.setState({ emailError: true, [e.target.id]: e.target.value });
@@ -121,7 +132,6 @@ class Login extends Component {
             localStorage.userToken = res.token;
             jwt.verify(res.token, process.env.SECRET_KEY, (err, decoded) => {
               if (err) {
-                console.log("verifying problem");
                 this.setState({ loginError: formInputs.loginErrors.Server });
               } else {
                 this.context.update("user", {
@@ -133,6 +143,7 @@ class Login extends Component {
                     Email: decoded.Email
                   }
                 });
+                this.props.history.push("/");
               }
             });
             console.log(this.context);
@@ -164,6 +175,7 @@ class Login extends Component {
                 helperText={printEmailErrors()}
                 id="Email"
                 type="email"
+                value={this.state.Email}
                 required
                 onChange={this.onChange}
               />
@@ -189,9 +201,11 @@ class Login extends Component {
                   {this.state.resendEmailMessage.text}
                 </p>
               </div>
+
               <Button
                 style={{ margin: "1.75em auto" }}
                 className="submitButton"
+                id="SubmitLoginButton"
                 variant="contained"
                 color="primary"
                 type="submit"

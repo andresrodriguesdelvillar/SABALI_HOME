@@ -393,6 +393,6 @@ export const confirmError = {
   },
   es: {
     text:
-      "This emailadress is not registered. If you changed your email adress please open the confirmationlink within the new Emailadress. Otherwise contact our support"
+      "Este correo electronico no esta registrado. Si cambiaste tu correo, por favor abre el nuevo enlace de confirmación. O contáctanos"
   }
 };

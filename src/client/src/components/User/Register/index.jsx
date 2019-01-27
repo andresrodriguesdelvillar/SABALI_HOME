@@ -125,11 +125,11 @@ class Register extends Component {
 
   handle_Submit_disabling = () => {
     const toCheck = [
-      "nameErrors",
-      "companyErrors",
-      "emailErrors",
-      "passwordErrors",
-      "confPassErrors"
+      "NameErrors",
+      "CompanyErrors",
+      "EmailErrors",
+      "PasswordErrors",
+      "ConfPassErrors"
     ];
     for (let i in toCheck) {
       for (let error in this.state[toCheck[i]]) {

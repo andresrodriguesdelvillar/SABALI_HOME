@@ -23,12 +23,8 @@ class Home extends Component {
   render() {
     return (
       <div className="Homecontainer">
-        <Link to="/login" id="link">
-          login
-        </Link>
-        <Link to="/register" id="link">
-          register
-        </Link>
+        <Link to="/login">login</Link>
+        <Link to="/register">register</Link>
         <Background />
       </div>
     );

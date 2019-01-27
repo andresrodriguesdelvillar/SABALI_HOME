@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 // subComponents
 import Nav from "../../SubComponents/Nav";
+import Timer from "../../SubComponents/Timer";
 
 // Style
 import "./style.scss";
@@ -60,42 +61,48 @@ class ConfirmEmailInfo extends Component {
               color: successColor
             }
           });
-        } else if (res.error === "Email") {
-          this.setState({
-            changeEmailRes: {
-              text:
-                confirmEmailInfo[this.context.language].changeEmail.result
-                  .Email,
-              color: errorColor
-            }
-          });
-        } else if (res.error === "Authorization") {
-          this.setState({
-            changeEmailRes: {
-              text:
-                confirmEmailInfo[this.context.language].changeEmail.result.Auth,
-              color: errorColor
-            }
-          });
-        } else if (res.message === "ConfirmationMail") {
-          this.setState({
-            changeEmailRes: {
-              text:
-                confirmEmailInfo[this.context.language].changeEmail.result
-                  .ConfirmationMail,
-              color: errorColor
-            }
-          });
-        } else {
-          this.setState({
-            changeEmailRes: {
-              text:
-                confirmEmailInfo[this.context.language].changeEmail.result
-                  .Server,
-              color: errorColor
-            }
-          });
-        }
+        } else
+          switch (res.error) {
+            case "Email":
+              this.setState({
+                changeEmailRes: {
+                  text:
+                    confirmEmailInfo[this.context.language].changeEmail.result
+                      .Email,
+                  color: errorColor
+                }
+              });
+              break;
+            case "Authorization":
+              this.setState({
+                changeEmailRes: {
+                  text:
+                    confirmEmailInfo[this.context.language].changeEmail.result
+                      .Auth,
+                  color: errorColor
+                }
+              });
+              break;
+            case "ConfirmationMail":
+              this.setState({
+                changeEmailRes: {
+                  text:
+                    confirmEmailInfo[this.context.language].changeEmail.result
+                      .ConfirmationMail,
+                  color: errorColor
+                }
+              });
+              break;
+            default:
+              this.setState({
+                changeEmailRes: {
+                  text:
+                    confirmEmailInfo[this.context.language].changeEmail.result
+                      .Server,
+                  color: errorColor
+                }
+              });
+          }
       })
       .catch(err => {
         this.setState({
@@ -155,6 +162,7 @@ class ConfirmEmailInfo extends Component {
       this.setState({ password: e.target.value });
     }
   };
+
   render() {
     const text = confirmEmailInfo[this.context.language];
     const EmailError = () => {
@@ -173,6 +181,8 @@ class ConfirmEmailInfo extends Component {
             <h3>
               {text.main} {this.state.userInfo.Email}
             </h3>
+
+            <Timer expires={this.state.userInfo.exp} />
             <h4>{text.resend.text}</h4>
             <div id="resendEmail" onClick={this.resendEmail}>
               <Button color="primary" variant="contained">

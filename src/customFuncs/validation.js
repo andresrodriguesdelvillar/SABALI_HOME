@@ -24,16 +24,22 @@ export const validate = (type, toCheck1, toCheck2 = null) => {
       if (toCheck1.length < 3 && toCheck1.length !== 0) {
         error.push("length");
       }
-      const re_name = /^[\w-_.&]*$/;
+      if (toCheck1[0] === " " || toCheck1[toCheck1.length - 1] === " ") {
+        error.push("space");
+      }
+      const re_name = /^[\w-_.& ]*$/;
       if (!re_name.test(toCheck1)) {
         error.push("symbols");
       }
       break;
 
     case "Company":
-      const re_company = /^[\w-_.&]*$/;
+      const re_company = /^[\w-_.& ]*$/;
       if (!re_company.test(toCheck1)) {
         error.push("symbols");
+      }
+      if (toCheck1[0] === " " || toCheck1[toCheck1.length - 1] === " ") {
+        error.push("space");
       }
       break;
 

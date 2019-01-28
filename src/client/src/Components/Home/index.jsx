@@ -1,16 +1,9 @@
 import React, { Component } from "react";
 
-import { Link } from "react-router-dom";
 // SubComponents
 
-// import {
-//   Client,
-//   MainLogo,
-//   Contact,
-//   Team,
-//   LatestWork
-// } from "./subComponents/functional"
 import Background from "./subComponents/background";
+import Nav from "../SubComponents/Nav";
 
 import "./Home.scss";
 
@@ -22,9 +15,8 @@ class Home extends Component {
   };
   render() {
     return (
-      <div className="Homecontainer">
-        <Link to="/login">login</Link>
-        <Link to="/register">register</Link>
+      <div id="Homecontainer">
+        <Nav include={["ClientMenu"]} />
         <Background />
       </div>
     );

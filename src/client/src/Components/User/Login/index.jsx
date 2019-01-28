@@ -146,7 +146,6 @@ class Login extends Component {
                 this.props.history.push("/");
               }
             });
-            console.log(this.context);
           } else {
             this.setState({ loginError: formInputs.loginErrors.Server });
           }
@@ -165,7 +164,7 @@ class Login extends Component {
     };
     return (
       <div id="Login">
-        <Nav />
+        <Nav include={["LanguageSelect"]} />
         <div className="container">
           <h1>{formInputs.title}</h1>
           <form noValidate onSubmit={Submit}>

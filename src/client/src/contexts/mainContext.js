@@ -89,28 +89,49 @@ class Provider extends Component {
         }
       );
     }
-    checkLocationAndLanguage()
-      .then(response => {
-        if (
-          response.languages === "de" ||
-          response.languages === "nl" ||
-          response.languages === "es"
-        ) {
-          this.setState({
-            location: response.country,
-            language: response.languages
-          });
-        } else {
-          this.setState({
-            location: response.country,
-            language: "en"
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({ location: "USA", language: "en" });
+    if (localStorage.userLanguage) {
+      if (
+        localStorage.userLanguage === "de" ||
+        localStorage.userLanguage === "nl" ||
+        localStorage.userLanguage === "es"
+      ) {
+        this.setState({ language: localStorage.userLanguage });
+      } else {
+        this.setState({ language: "en" });
+      }
+      checkLocationAndLanguage().then(response => {
+        this.setState({ location: response.country });
       });
+    } else {
+      checkLocationAndLanguage()
+        .then(response => {
+          if (
+            response.languages === "de" ||
+            response.languages === "nl" ||
+            response.languages === "es"
+          ) {
+            this.setState({
+              location: response.country,
+              language: response.languages
+            });
+            localStorage.userLanguage = response.language;
+          } else {
+            this.setState({
+              location: response.country,
+              language: "en"
+            });
+            localStorage.userLanguage = "en";
+          }
+        })
+        .catch(() => {
+          this.setState({ location: "USA", language: "en" });
+        });
+    }
   }
+
+  updatePosition = position => {
+    console.log(position);
+  };
   updateMany = toUpdate => {
     for (let i in toUpdate) {
       this.update(toUpdate[i][0], toUpdate[i][1]);

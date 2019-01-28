@@ -182,7 +182,9 @@ class ConfirmEmailInfo extends Component {
               {text.main} {this.state.userInfo.Email}
             </h3>
 
-            <Timer expires={this.state.userInfo.exp} />
+            <Timer
+              expires={this.state.userInfo.exp ? this.state.userInfo.exp : 0}
+            />
             <h4>{text.resend.text}</h4>
             <div id="resendEmail" onClick={this.resendEmail}>
               <Button color="primary" variant="contained">

@@ -176,7 +176,7 @@ class Register extends Component {
 
     return (
       <div id="register">
-        <Nav />
+        <Nav include={["LanguageSelect"]} />
         <div className="container">
           <h1>{formLabels.title}</h1>
           <form noValidate onSubmit={this.Submit}>

@@ -64,9 +64,6 @@ app.use("/user", Users);
 if (process.env.NODE_ENV === "production") {
   // set static folder
   app.use(express.static("client"));
-  app.get("/sw.js", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client/", "sw.js"));
-  });
   app.get("/*", (req, res) => {
     res.sendFile(resolve("client/", "index.html"), err => {
       if (err) {

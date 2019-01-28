@@ -72,7 +72,6 @@ class Background extends Component {
   };
 
   render() {
-    console.log(this.context);
     return (
       <div id="Background" name="Background">
         <div id="layer1">

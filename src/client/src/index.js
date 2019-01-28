@@ -2,6 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import Provider from "./contexts/mainContext";
 import "./index.css";
+import "bootstrap/dist/css/bootstrap.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 

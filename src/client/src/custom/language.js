@@ -4,6 +4,7 @@ export const register = {
     Name: {
       label: "Name",
       errors: {
+        space: "The name can not begin or end with a space",
         length: "the name needs to be at least 3 characters long",
         symbols:
           "the name can only contain latin-letters and the following symbols (_, -, ., &)"
@@ -12,6 +13,7 @@ export const register = {
     Company: {
       label: "Company",
       errors: {
+        space: "The company can not begin or end with a space",
         symbols:
           "the company name can only contain latin-letters and the following symbols (_, -, ., &)"
       }
@@ -45,6 +47,7 @@ export const register = {
     Name: {
       label: "Name",
       errors: {
+        space: "Der Name darf nicht mit einem Leerzeichen beginnen oder enden",
         length: "Der Name muss mindestens 3 Zeichen enthalten",
         symbols:
           "Der Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, ., &)"
@@ -53,8 +56,11 @@ export const register = {
     Company: {
       label: "Firma",
       errors: {
+        space:
+          "Der Firmen-name darf nicht mit einem Leerzeichen beginnen oder enden",
+
         symbols:
-          "Der Firmen-Name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, ., &)"
+          "Der Firmen-name darf nur lateinische Buchstaben und die folgenden Symbole enthalten (_, -, ., &)"
       }
     },
     Email: {
@@ -88,6 +94,7 @@ export const register = {
     Name: {
       label: "Naam",
       errors: {
+        space: "De naam mag niet met een spatie beginnen of eindigen",
         length: "De naam moet tenminst 3 karaters bevatten",
         symbols:
           "De naam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, ., &)"
@@ -96,6 +103,8 @@ export const register = {
     Company: {
       label: "Bedrijf",
       errors: {
+        space: "De bedrijfsnaam mag niet met een spatie beginnen of eindigen",
+
         symbols:
           "De bedrijfsnaam mag allein lateinische karakters en de volgenden symbole bevatten (_, -, ., &)"
       }
@@ -130,6 +139,7 @@ export const register = {
     Name: {
       label: "Nombre",
       errors: {
+        space: "El nombre no puede comenzar o terminar con un espacio",
         length: "El nombre requiere mínimo 3 caracteres",
         symbols:
           "El nombre de la compañia debe de consistir solamente de caracteres latinos o los símbolos (_, -, ., &)"
@@ -138,6 +148,8 @@ export const register = {
     Company: {
       label: "Compañia",
       errors: {
+        space:
+          "El nombre de la compañia no puede comenzar o terminar con un espacio",
         symbols:
           "El nombre de la compañia debe de consistir solamente de caracteres latinos o los símbolos (_, -, ., &)"
       }
@@ -163,6 +175,29 @@ export const register = {
       Server: "Oops there has been a server error, please try again"
     },
     submitButton: "Register"
+  }
+};
+
+export const clientLinks = {
+  en: {
+    login: "Login",
+    register: "Register",
+    logout: "Logout"
+  },
+  de: {
+    login: "Anmelden",
+    register: "Registrieren",
+    logout: "Abmelden"
+  },
+  nl: {
+    login: "Aanmelden",
+    register: "Registreren",
+    logout: "Uitloggen"
+  },
+  es: {
+    login: "Registrar",
+    register: "Register",
+    logout: "cierre de sesión"
   }
 };
 

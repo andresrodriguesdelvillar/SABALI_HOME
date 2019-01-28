@@ -48,6 +48,7 @@ export const mobileParallax = (orientaion, type, maxMove, layers) => {
           maxMove}px, ${-orientaion.tilt_horizontal *
           layers[layer][0] *
           maxMove}px)`;
+        break;
       case "landscape-secondary":
         document.getElementById(
           layer
@@ -56,6 +57,8 @@ export const mobileParallax = (orientaion, type, maxMove, layers) => {
           maxMove}px, ${-orientaion.tilt_horizontal *
           layers[layer][0] *
           maxMove}px)`;
+        break;
+
       default:
         document.getElementById(
           layer

@@ -1,7 +1,7 @@
 {
   "name": "sabali_home",
   "version": "1.0.0",
-  "description": "Sabali web development homepage",
+  "description": "Sabali Homepage build with React. An on the edge webdevelopment company",
   "main": "src/server/server.js",
   "scripts": {
     "install_server": "npm install --prefix src/server",
@@ -10,15 +10,19 @@
     "server_dev": "npm run dev --prefix src/server",
     "install_client": "npm install --prefix src/client",
     "build_client": "npm run build --prefix src/client",
-    "client_dev": "npm run dev --prefix src/client",
-    "dev": "npm run dev --prefix src/client & npm run dev --prefix src/server",
+    "client_dev": "npm start --prefix src/client",
+    "dev": "npm run client_dev & npm run server_dev",
     "build": "npm run build_server && npm run build_client",
     "install": "npm run install_server && npm run install_client",
     "heroku_deploy": "npm run build && cd dist && git add . && git commit -am 'deploy' && git push heroku master",
     "git": "git add . && git commit -m 'commit' && git push origin master"
   },
+  "keywords": [
+    "webdevelopment",
+    "react"
+  ],
   "author": "Vindao (Vincent Schmitt)",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "jsonwebtoken": "^8.4.0"
   }

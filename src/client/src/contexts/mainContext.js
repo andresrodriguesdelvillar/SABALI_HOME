@@ -1,9 +1,9 @@
 import React, { Component, createContext } from "react";
 
 import jwt from "jsonwebtoken";
+import { isMobile } from "react-device-detect";
 
 export const mainContext = createContext();
-import { isMobile } from "react-device-detect";
 
 const checkLocationAndLanguage = () => {
   return fetch("https://ipapi.co/json").then(res => res.json());
@@ -54,6 +54,41 @@ class Provider extends Component {
   };
 
   componentWillMount() {
+    if (localStorage.userToken) {
+      jwt.verify(
+        localStorage.userToken,
+        process.env.SECRET_KEY,
+        (err, decoded) => {
+          if (err) {
+            localStorage.removeItem("userToken");
+            // this.setState({
+            //   user: {
+            //     loggedIn: false,
+            //     details: {
+            //       ID: false,
+            //       Name: false,
+            //       Company: false,
+            //       Email: false
+            //     }
+            //   }
+            // });
+            return;
+          } else {
+            this.setState({
+              user: {
+                loggedIn: true,
+                details: {
+                  ID: decoded.ID,
+                  Name: decoded.Name,
+                  Company: decoded.Company,
+                  Email: decoded.Email
+                }
+              }
+            });
+          }
+        }
+      );
+    }
     checkLocationAndLanguage()
       .then(response => {
         if (
@@ -75,29 +110,6 @@ class Provider extends Component {
       .catch(() => {
         this.setState({ location: "USA", language: "en" });
       });
-    if (localStorage.userToken) {
-      jwt.verify(
-        localStorage.userToken,
-        process.env.SECRET_KEY,
-        (err, decoded) => {
-          if (err) {
-            return;
-          } else {
-            this.setState({
-              user: {
-                loggedIn: true,
-                details: {
-                  ID: decoded.ID,
-                  Name: decoded.Name,
-                  Company: decoded.Company,
-                  Email: decoded.Email
-                }
-              }
-            });
-          }
-        }
-      );
-    }
   }
   updateMany = toUpdate => {
     for (let i in toUpdate) {

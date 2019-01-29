@@ -79,7 +79,7 @@ class ClientMenu extends Component {
           <DropdownToggle id="clientMenuButton">
             <img src={Logo} alt="" />
           </DropdownToggle>
-          <DropdownMenu right style={{ marginRight: "1.25em" }}>
+          <DropdownMenu right style={{ marginRight: "1.25em", width: "15vw" }}>
             {this.state.dropdownItems.map((item, i) => {
               if (item.link === "logout") {
                 return (

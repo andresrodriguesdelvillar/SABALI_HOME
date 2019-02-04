@@ -5,25 +5,34 @@ class Timer extends Component {
     time: 0
   };
 
-  componentDidMount() {
-    this.handleTimer(this.props.expires * 1000);
-  }
-
-  handleTimer = expires => {
-    let TimeInMs = expires - Date.now();
-    this.setState({ time: new Date(TimeInMs).toISOString().slice(14, -5) });
-    const interval = setInterval(() => {
+  componentWillMount() {
+    this.interval = setInterval(() => {
+      let TimeInMs = this.props.expires * 1000 - Date.now();
+      this.setState({
+        time: new Date(TimeInMs).toISOString().slice(14, -5),
+        TimeInMs: TimeInMs
+      });
       if (TimeInMs < 1000) {
         this.setState({ time: new Date(0).toISOString().slice(14, -5) });
-        clearInterval(interval);
+        clearInterval(this.interval);
       }
-      TimeInMs = expires - Date.now();
-      this.setState({ time: new Date(TimeInMs).toISOString().slice(14, -5) });
-    }, TimeInMs % 1000);
-  };
+    }, this.state.TimeInMs % 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   render() {
-    return <div id="Timer">{this.state.time}</div>;
+    return (
+      <div id="Timer">
+        <h4>
+          {this.props.text._1}
+          <span style={{ fontWeight: "bold" }}>{this.state.time}</span>
+          {this.props.text._2}
+        </h4>
+      </div>
+    );
   }
 }
 

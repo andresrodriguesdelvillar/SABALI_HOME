@@ -24,6 +24,7 @@
   "author": "Vindao (Vincent Schmitt)",
   "license": "ISC",
   "dependencies": {
+    "es6-promise": "^4.2.5",
     "jsonwebtoken": "^8.4.0"
   }
 }

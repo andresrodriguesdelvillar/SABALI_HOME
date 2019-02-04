@@ -5,8 +5,6 @@ import React, { Component } from "react";
 import Background from "./subComponents/background";
 import Nav from "../SubComponents/Nav";
 
-import "./Home.scss";
-
 class Home extends Component {
   state = {};
 
@@ -15,7 +13,15 @@ class Home extends Component {
   };
   render() {
     return (
-      <div id="Homecontainer">
+      <div
+        id="Homecontainer"
+        style={{
+          position: "absolute",
+          overflow: "hidden",
+          width: "100vw",
+          height: "100vh"
+        }}
+      >
         <Nav include={["ClientMenu"]} />
         <Background />
       </div>

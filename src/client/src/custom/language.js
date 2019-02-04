@@ -309,125 +309,178 @@ export const login = {
   }
 };
 
-export const confirmEmailInfo = {
+export const resendEmail = {
   en: {
-    main: "We have sent an email to: ",
-    resend: {
-      text: "Did not reseive an Email?",
-      button: "Resend Email",
-      messages: {
-        success: "Email was send again!",
-        error: "Email was not send, please try again!"
-      }
-    },
-    changeEmail: {
-      text: "The Email is wrong, or you have no access to it",
-      button: "Change Email",
-      error: "This is not a valid Emailadress",
-      result: {
-        success: "The Email was successfully changed",
-        Auth:
-          "The authorization failed. Please use the password you've entered in the registration",
-        Email: "The Email you wanted to change to is already registered",
-        Server: "There has been a server-error, please try again",
-        ConfirmationMail:
-          "The Email adress was changed, but there was an error sending the new confirmation mail. Please try to send the Email again, or contact our support."
-      }
+    button: "Resend Email",
+    messages: {
+      success: "Email was send again!",
+      error: "Email was not send, please try again!"
     }
   },
   de: {
-    main: "Wir haben eine Email an die folgende adresse gesendet: ",
-    resend: {
-      text: "Keine Email erhalten?",
-      button: "Email erneut senden",
-      messages: {
-        success: "Email wurde erneut gesendet!",
-        error:
-          "Email konnte nicht versendet werden, bitte versuchen sie es erneut!"
-      }
-    },
-    changeEmail: {
-      text: "Die Email ist falsch, oder sie haben keinen Zugriff?",
-      button: "Email ändern",
-      error: "Dies ist keine gültige Email adresse",
-      result: {
-        success: "Die Emailadresse wurde geändert",
-        Auth:
-          "Das hat nicht funktioniert. Bitte benutzen sie das Passwort aus der Registrierung",
-        Email: "Diese Emailadresse ist bereits registriert",
-        Server: "Es gab einen Server-error, bitte versuchen sie es erneut",
-        ConfirmationMail:
-          "Die Emailadresse wurde geändert, aber es gab ein problem beim senden der neuen Bestätigungsmail. Bitte versuchen sie die Email erneut zu versenden und/oder kontaktieren sie unseren Support"
-      }
+    button: "Email erneut senden",
+    messages: {
+      success: "Email wurde erneut gesendet!",
+      error:
+        "Email konnte nicht versendet werden, bitte versuchen sie es erneut!"
     }
   },
   nl: {
-    main: "We hebben een email aan de volgende adres gestuurt: ",
-    resend: {
-      text: "Geen email ontvangen?",
-      button: "Emain opnieuw senden",
-      messages: {
-        success: "Email werd opnieuw gerstuurt!",
-        error: "Email kon niet worden gestuurt, probeer het opnieuw!"
-      }
-    },
-    changeEmail: {
-      text: "De Email is fout, of U hebt geen access?",
-      button: "Email veranderen",
-      error: "Dat is geen geldige Email adres",
-      result: {
-        success: "De Emailadres werd verandert",
-        Auth:
-          "De autorizatie is mislukt. Gebruik alsteblieft de wachtwoord van de registratie",
-        Email: "Deze Emailadres is al geregistreerd",
-        Server: "Er was een error met de server, probeer het opnieuw",
-        ConfirmationMail:
-          "De Emailadres werd verandert, maar er was een problem met het senden van de bevestigingsemail. probeer de email opnieuw te versturen en/of contacteer onze support"
-      }
+    button: "Email opnieuw senden",
+    messages: {
+      success: "Email werd opnieuw gerstuurt!",
+      error: "Email kon niet worden gestuurt, probeer het opnieuw!"
     }
   },
   es: {
-    main: "Te hemos mandado un email. Hacia:   ",
-    resend: {
-      text: "No recibió email?",
-      button: "Mandar email de nuevo",
-      messages: {
-        success: "Hemos mandado el correo otra vez!",
-        error: "El correo no fue enviado, por favor trate otra vez!"
-      }
-    },
-    changeEmail: {
-      text: "El email es incorrecto, o no tienes acceso?",
-      button: "Cambiar email",
-      error: "El email no es válido",
-      result: {
-        success: "El email a sido cambiado",
-        Auth:
-          "La autorización no es valida. Usa la contraseña que usaste a la hora de registrarte",
-        Email: "El email que trataste de usar ya esta registrado",
-        Server: "Hay un problemo con el servidor, por favor trate de nuevo",
-        ConfirmationMail:
-          "El email se cambió pero ha ávido un error mandando el email de confirmación, por favor trata de mandar el email de nuevo o contacta nos"
-      }
+    button: "Mandar email de nuevo",
+    messages: {
+      success: "Hemos mandado el correo otra vez!",
+      error: "El correo no fue enviado, por favor trate otra vez!"
+    }
+  }
+};
+
+export const changeEmail = {
+  en: {
+    button: "Change Email",
+    error: "This is not a valid Emailadress",
+    result: {
+      success: "The Email was successfully changed",
+      Auth:
+        "The authorization failed. Please use the password you've entered in the registration",
+      Email: "The Email you wanted to change to is already registered",
+      Server: "There has been a server-error, please try again",
+      ConfirmationMail:
+        "The Email adress was changed, but there was an error sending the new confirmation mail. Please try to send the Email again, or contact our support."
+    }
+  },
+  de: {
+    button: "Email ändern",
+    error: "Dies ist keine gültige Email adresse",
+    result: {
+      success: "Die Emailadresse wurde geändert",
+      Auth:
+        "Das hat nicht funktioniert. Bitte benutzen sie das Passwort aus der Registrierung",
+      Email: "Diese Emailadresse ist bereits registriert",
+      Server: "Es gab einen Server-error, bitte versuchen sie es erneut",
+      ConfirmationMail:
+        "Die Emailadresse wurde geändert, aber es gab ein problem beim senden der neuen Bestätigungsmail. Bitte versuchen sie die Email erneut zu versenden und/oder kontaktieren sie unseren Support"
+    }
+  },
+  nl: {
+    button: "Email veranderen",
+    error: "Dat is geen geldige Email adres",
+    result: {
+      success: "De Emailadres werd verandert",
+      Auth:
+        "De autorizatie is mislukt. Gebruik alsteblieft de wachtwoord van de registratie",
+      Email: "Deze Emailadres is al geregistreerd",
+      Server: "Er was een error met de server, probeer het opnieuw",
+      ConfirmationMail:
+        "De Emailadres werd verandert, maar er was een problem met het senden van de bevestigingsemail. probeer de email opnieuw te versturen en/of contacteer onze support"
+    }
+  },
+  es: {
+    button: "Cambiar email",
+    error: "El email no es válido",
+    result: {
+      success: "El email a sido cambiado",
+      Auth:
+        "La autorización no es valida. Usa la contraseña que usaste a la hora de registrarte",
+      Email: "El email que trataste de usar ya esta registrado",
+      Server: "Hay un problemo con el servidor, por favor trate de nuevo",
+      ConfirmationMail:
+        "El email se cambió pero ha ávido un error mandando el email de confirmación, por favor trata de mandar el email de nuevo o contacta nos"
+    }
+  }
+};
+
+export const confirmEmailInfo = {
+  en: {
+    resendEmail: "Did not reseive an Email?",
+    changeEmail: "The Email is wrong, or you have no access to it",
+    main: "We have sent an email to: ",
+    timer_1: "The link is still valid for: ",
+    timer_2: ""
+  },
+  de: {
+    resendEmail: "Keine Email erhalten?",
+    changeEmail: "Die Email ist falsch, oder sie haben keinen Zugriff?",
+    main: "Wir haben eine Email an die folgende adresse gesendet: ",
+    timer_1: "Der Link ist noch für ",
+    timer_2: " gültig"
+  },
+  nl: {
+    resendEmail: "Geen email ontvangen?",
+    changeEmail: "De Email is fout, of U hebt geen access?",
+    main: "We hebben een email aan de volgende adres gestuurt: ",
+    timer_1: "De link is nog voor: ",
+    timer_2: " geldig"
+  },
+  es: {
+    resendEmail: "No recibió email?",
+    changeEmail: "El email es incorrecto, o no tienes acceso?",
+    main: "Te hemos mandado un email. Hacia: ",
+    timer_1: "De link is nog voor: ",
+    timer_2: " geldig"
+  }
+};
+
+export const alerts = {
+  en: {
+    newContent: {
+      _1: "New content is available. Click ",
+      _2: " to see them, or close all tabs of this page.",
+      b: "here"
+    }
+  },
+  de: {
+    newContent: {
+      _1: "Neue Inhalte sind verfügbar. Klicken sie ",
+      _2: " um sie zu sehen, oder scließen sie alle tabs von dieser Seite.",
+      b: "hier"
+    }
+  },
+  nl: {
+    newContent: {
+      _1: "Nieuwe inhoud is beschikbaar. Klik ",
+      _2: " om het te zien of sluit alle tabs van deze website.",
+      b: "hier"
+    }
+  },
+  es: {
+    newContent: {
+      _1: "Contenido nuevo disponible. Haz Clic aquí ",
+      _2: " Para ver el contenido nuevo o para cerrar esta pagina.",
+      b: "aqui"
     }
   }
 };
 
 export const confirmError = {
   en: {
-    text:
-      "This emailadress is not registered. If you changed your email adress please open the confirmationlink within the new Emailadress. Otherwise contact our support"
+    emailUnknown:
+      "This emailadress is not registered. The email associated with this account is: ",
+    tokenExpired:
+      "The link is expired. Please resend the email and open the new link to verify your account"
   },
   de: {
-    text:
-      "Diese Emailadresse ist nicht registriert. Wahrscheinlich haben sie die Emailadresse geändert. In dem Fall öffnen sie bitte den Link in der neuen Email bestätigungs mail. Andernfalls kontaktieren sie bitte unseren Support"
+    emailUnknown:
+      "Diese Emailadresse ist nicht registriert. Die Emailadresse die mit diesem account verbunden ist, ist: ",
+    tokenExpired:
+      "Dieser Link ist abgelaufen. Bitte versenden sie die Email erneut und öffnen sie den link in der neuen Email"
   },
   nl: {
-    text:
-      "Deze Emailadres is niet geregistrert. Waarschijnlijk hebt U de Emailadres gewisselt, in dat geval open alsteblieft de link in de nieuwe Email. Als dat niet de geval is contacteer alsteblieft onze Support."
+    emailUnknown:
+      "Deze Emailadres is niet geregistrert. De emailadres geassocieerd met deze account is: ",
+    tokenExpired:
+      "Deze link is verlopen. Alsteblieft versend de email opnieuw en open de link in de nieuwe Email"
   },
   es: {
-    text:
-      "Este correo electronico no esta registrado. Si cambiaste tu correo, por favor abre el nuevo enlace de confirmación. O contáctanos"
+    emailUnknown:
+      "Este correo electronico no esta registrado. El Correo electrónico asociado con esta cuenta es: ",
+    tokenExpired:
+      "El enlace ha expirado. Te hemos mandado un correo de confirmación, por favor habrá el enlace nuevo"
   }
 };

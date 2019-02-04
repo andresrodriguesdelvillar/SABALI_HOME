@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 
+import Img from "react-webp-image";
+
 //context
-import { mainContext } from "../../../contexts/mainContext";
+import { mainContext } from "../../../contexts/contexts";
 
 // customFuncs
 import {
@@ -14,9 +16,13 @@ import {
 import "./sub.scss";
 
 const img1 = require("../assets/5.buttons.png");
+const webp1 = require("../assets/5.buttons.webp");
 const img2 = require("../assets/3.aarde.png");
+const webp2 = require("../assets/3.aarde.webp");
 const img3 = require("../assets/ocean-klein.png");
+const webp3 = require("../assets/ocean-klein.webp");
 const img4 = require("../assets/sky-klein.jpg");
+const webp4 = require("../assets/sky-klein.webp");
 
 class Background extends Component {
   componentDidMount() {
@@ -75,16 +81,31 @@ class Background extends Component {
     return (
       <div id="Background" name="Background">
         <div id="layer1">
-          <img src={img1} />
+          <Img className="homeLayer" src={img1} webp={webp1} />
         </div>
         <div id="layer2">
-          <img src={img2} alt="The second layer of the background" />
+          <Img
+            className="homeLayer"
+            src={img2}
+            webp={webp2}
+            alt="The second layer of the background"
+          />
         </div>
         <div id="layer3">
-          <img src={img3} alt="The third layer of the background" />
+          <Img
+            className="homeLayer"
+            src={img3}
+            webp={webp3}
+            alt="The third layer of the background"
+          />
         </div>
         <div id="layer4">
-          <img src={img4} alt="The fourth layer of the background" />
+          <Img
+            className="homeLayer"
+            src={img4}
+            webp={webp4}
+            alt="The fourth layer of the background"
+          />
         </div>
       </div>
     );

@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+
+import Img from "react-webp-image";
 
 import {
   Dropdown,
@@ -11,95 +13,76 @@ import { Link } from "react-router-dom";
 
 // assets
 import Logo from "../../assets/logo.svg";
+import webpLogo from "../../assets/logo.webp";
 
 // custom Imports
 import { clientLinks } from "../../../custom/language";
 
 // context
-import { mainContext } from "../../../contexts/mainContext";
-
-// style
-import "./style.scss";
+import { mainContext } from "../../../contexts/contexts";
 
 class ClientMenu extends Component {
   state = {
-    open: false,
-    dropdownItems: [
-      { text: "login", link: "/login" },
-      { text: "register", link: "/register" }
-    ]
+    open: false
   };
 
   componentWillMount() {
-    if (this.context.user.loggedIn) {
-      this.composeUser();
-    } else {
-      this.composeNoUser();
-    }
+    this.context.handleUserAuth();
   }
-
-  composeUser = () => {
-    const dropdownitems = [
-      { text: clientLinks[this.context.language].logout, link: "logout" }
-    ];
-
-    this.setState({ dropdownItems: dropdownitems });
-  };
-
-  composeNoUser = () => {
-    const dropdownitems = [
-      { text: clientLinks[this.context.language].login, link: "/login" },
-      { text: clientLinks[this.context.language].register, link: "/register" }
-    ];
-
-    this.setState({ dropdownItems: dropdownitems });
-  };
 
   logout = () => {
     localStorage.removeItem("userToken");
-    this.context.update("user", {
-      loggedIn: false,
-      details: {
-        ID: false,
-        Name: false,
-        Company: false,
-        Email: false
-      }
-    });
-    this.composeNoUser();
+    this.context.handleUserAuth();
   };
 
   toggle = () => {
     this.setState({ open: !this.state.open });
   };
+
   render() {
+    const lang = clientLinks[this.context.language];
+    const LoggedIn = (
+      <DropdownItem onClick={this.logout} style={{ cursor: "pointer" }}>
+        {lang.logout}
+      </DropdownItem>
+    );
+    const notLoggedIn = (
+      <Fragment>
+        <Link to="/login">
+          <DropdownItem style={{ cursor: "pointer" }}>
+            {lang.login}
+          </DropdownItem>
+        </Link>
+        <Link to="register">
+          <DropdownItem style={{ cursor: "pointer" }}>
+            {lang.register}
+          </DropdownItem>
+        </Link>
+      </Fragment>
+    );
     return (
-      <div id="clientMenu" style={{ height: "20vh" }}>
+      <div id="clientMenu" style={{ float: "right" }}>
         <Dropdown isOpen={this.state.open} toggle={this.toggle}>
-          <DropdownToggle id="clientMenuButton">
-            <img src={Logo} alt="" />
+          <DropdownToggle
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              boxShadow: "none",
+              width: "15vw",
+              minWidth: "75px"
+            }}
+            id="clientMenuButton"
+            aria-label="client menu"
+          >
+            <Img
+              src={Logo}
+              webp={webpLogo}
+              alt="clientButton Image"
+              style={{ width: "100%" }}
+            />
           </DropdownToggle>
           <DropdownMenu right style={{ marginRight: "1.25em", width: "15vw" }}>
-            {this.state.dropdownItems.map((item, i) => {
-              if (item.link === "logout") {
-                return (
-                  <DropdownItem
-                    key={i}
-                    onClick={this.logout}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {item.text}
-                  </DropdownItem>
-                );
-              }
-              return (
-                <Link key={i} to={item.link}>
-                  <DropdownItem style={{ cursor: "pointer" }}>
-                    {item.text}
-                  </DropdownItem>
-                </Link>
-              );
-            })}
+            {this.context.loggedIn ? LoggedIn : notLoggedIn}
           </DropdownMenu>
         </Dropdown>
       </div>

@@ -27,7 +27,7 @@ user.use(cors());
 // external custom functions
 
 import { validate } from "../../customFuncs/validation";
-import { arrayIncludes } from "../customFuncs/checks";
+import { arrayIncludes } from "../../customFuncs/checks";
 import {
   SendConfMail,
   SendResetPassMail,
@@ -50,7 +50,7 @@ import { tokenExpires } from "../config/main";
 // registers the user in DB with email confirmation = false
 // and send confirmation mail
 user.post("/register", (req, res) => {
-  // check if request includes required values
+  console.log(req.body);
   const requires = [
     "Language",
     "Email",
@@ -203,6 +203,7 @@ user.post("/register", (req, res) => {
 */
 
 user.post("/resendemail", (req, res) => {
+  console.log(req.body);
   // check if request body is valid
   const requires = ["Email", "Language"];
   if (!arrayIncludes(requires, Object.keys(req.body))) {
@@ -265,9 +266,11 @@ user.post("/resendemail", (req, res) => {
 */
 
 user.post("/changeemail", (req, res) => {
+  console.log(req.body);
   // check if request pody is valid
   const requires = ["newEmail", "Password", "oldEmail", "Language"];
   if (!arrayIncludes(requires, Object.keys(req.body))) {
+    console.log("wrong params");
     res.status(400).send({ error: "bad request" });
     return;
   }
@@ -321,9 +324,6 @@ user.post("/changeemail", (req, res) => {
                     // successfull response
                     // Email adres changed and new confirmation mail send
                     res.status(200).send({
-                      message: `email adress changed to ${
-                        Params.newEmail
-                      } and confirmation mail was send`,
                       success: true,
                       newEmail: Params.newEmail,
                       messageId: messageId.messageId
@@ -365,6 +365,19 @@ user.get("/confirmaccount/:token", (req, res) => {
     if (err) {
       // error verifying jwt-token
       // => response with error = 'bad request token'
+      if (err.name === "TokenExpiredError") {
+        const payload = jwt.decode(req.params.token);
+        res
+          .status(400)
+          .redirect(
+            req.protocol +
+              "://" +
+              req.get("host") +
+              "/confirmemailerror?error=tokenExpired&email=" +
+              payload.Email
+          );
+        return;
+      }
       res.status(400).send({ success: false, error: "bad request token" });
     } else {
       // verification success
@@ -375,29 +388,40 @@ user.get("/confirmaccount/:token", (req, res) => {
         return;
       }
       // find user in DB
-      User.findOne({ Email: decoded.Email, _id: decoded.ID })
+      User.findOne({ _id: decoded.ID })
         .then(user => {
           if (!user) {
             // user does not exist
-            // => redirect to /confirmemailError
+            // => responde with bad request
+            res.status(400).send({ success: false, error: "bad request" });
+          } else if (user.Email !== decoded.Email) {
             res
               .status(400)
               .redirect(
-                req.protocol + "://" + req.get("host") + "/confirmemailerror"
+                req.protocol +
+                  "://" +
+                  req.get("host") +
+                  "/confirmemailerror?error=emailUnknown&email=" +
+                  user.Email
               );
           } else {
-            // user does exist
+            // user does exist and Email is write
             // => set Confirmed = true
             user.Confirmed = true;
             user.save();
             // construct Link to redirect to
-            const Link =
-              req.protocol +
-              "://" +
-              req.get("host") +
-              "/login?email=" +
-              user.Email;
-            res.status(200).redirect(Link);
+            if (process.env.NODE_ENV === "development") {
+              const Link = "http://localhost:3000/login?email=" + user.Email;
+              res.status(200).redirect(Link);
+            } else {
+              const Link =
+                req.protocol +
+                "://" +
+                req.get("host") +
+                "/login?email=" +
+                user.Email;
+              res.status(200).redirect(Link);
+            }
           }
         })
         .catch(err => {

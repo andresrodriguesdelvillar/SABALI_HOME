@@ -2,11 +2,10 @@ import React, { Component } from "react";
 
 import { NavLink } from "react-router-dom";
 import Loadable from "react-loadable";
+import Img from "react-webp-image";
 
 import Logo from "../../assets/logo.svg";
-
-//style
-import "./style.scss";
+import webpLogo from "../../assets/logo.webp";
 
 // components
 import Loading from "../../Loading";
@@ -47,15 +46,20 @@ class Nav extends Component {
 
   render() {
     return (
-      <div id="Nav">
+      <div id="Nav" style={{ width: "100%", height: "10vh" }}>
         <nav>
-          <h1>
+          <h1 style={{ margin: 0, padding: 0 }}>
             <NavLink to="/">
-              <img id="Logo" src={Logo} alt="Sabali Logo" />
+              <Img
+                style={{ float: "left", minWidth: "100px", width: "15vw" }}
+                src={Logo}
+                webp={webpLogo}
+                alt="Sabali Logo"
+              />
             </NavLink>
           </h1>
-          {this.state.toRender.map((comp, i) => {
-            return <pre key={i}>{comp}</pre>;
+          {this.state.toRender.map((Comp, i) => {
+            return <div key={i}>{Comp}</div>;
           })}
         </nav>
       </div>

@@ -23,9 +23,15 @@ const getClientEnvironment = require("./env");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin-alt");
 const typescriptFormatter = require("react-dev-utils/typescriptFormatter");
+const CompressionPlugin = require("compression-webpack-plugin");
+const BrotliPlugin = require("brotli-webpack-plugin");
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
+let shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
+
+if (process.env.NODE_ENV === "production") {
+  shouldUseSourceMap = false;
+}
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== "false";
@@ -118,9 +124,9 @@ module.exports = function(webpackEnv) {
     bail: isEnvProduction,
     devtool: isEnvProduction
       ? shouldUseSourceMap
-        ? "source-map"
+        ? false
         : false
-      : isEnvDevelopment && "cheap-module-source-map",
+      : "source-map",
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: [
@@ -492,6 +498,24 @@ module.exports = function(webpackEnv) {
             : undefined
         )
       ),
+      isEnvProduction &&
+        new CompressionPlugin({
+          filename: "[path].gz[query]",
+          algorithm: "gzip",
+          include: /\.js$|\.css$/,
+          threshold: 10240,
+          minRatio: 0.8
+        }),
+      isEnvProduction &&
+        new BrotliPlugin({
+          asset: "[path].br[query]",
+          test: /\.js$|\.css$|\.html$/,
+          threshold: 10240,
+          minRatio: 0.8
+        }),
+      // new webpack.ProvidePlugin({
+      //   fetch: "exports-loader?self.fetch!whatwg-fetch"
+      // }),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       isEnvProduction &&

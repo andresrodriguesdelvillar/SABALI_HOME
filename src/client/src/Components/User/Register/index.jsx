@@ -3,16 +3,14 @@ import React, { Component } from "react";
 
 import { FormControl, TextField, Button } from "@material-ui/core";
 
-// style
-import "./style.scss";
-
 //custom Imports
 import { register } from "../../../custom/language";
 import { errorColor } from "../../../custom/colors";
 import { validate } from "../../../../../customFuncs/validation";
+import { withContext } from "../../../custom/withContext";
 
-//context
-import { mainContext } from "../../../contexts/mainContext";
+//contexts
+import { mainContext, fetchContext } from "../../../contexts/contexts";
 
 // Components
 import Nav from "../../SubComponents/Nav";
@@ -46,6 +44,12 @@ class Register extends Component {
     registrationError: ""
   };
 
+  componentWillMount() {
+    if (this.context.loggedIn) {
+      this.props.history.push("/");
+    }
+  }
+
   Submit = e => {
     e.preventDefault();
     this.setState({ disable_submit: true });
@@ -57,7 +61,7 @@ class Register extends Component {
       Company: this.state.formInputCompany,
       Language: this.context.language
     };
-    this.context.fetch
+    this.props.context
       .post(formData, "/user/register")
       .then(res => res.json())
       .then(res => {
@@ -207,6 +211,7 @@ class Register extends Component {
                 required
                 type="password"
                 id="Password"
+                autoComplete="new-password"
                 label={formLabels.Password.label}
                 onChange={this.onChange}
               />
@@ -215,6 +220,7 @@ class Register extends Component {
                 helperText={printError("ConfPass")}
                 type="password"
                 id="ConfPass"
+                autoComplete="new-password"
                 label={formLabels.ConfPass.label}
                 onChange={this.onChange}
               />
@@ -241,4 +247,4 @@ class Register extends Component {
 
 Register.contextType = mainContext;
 
-export default Register;
+export default withContext(fetchContext, Register);

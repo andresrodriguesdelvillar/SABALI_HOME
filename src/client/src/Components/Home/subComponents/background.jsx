@@ -13,8 +13,6 @@ import {
   mobileParallax
 } from "../../../custom/deviceOrientation";
 
-import "./sub.scss";
-
 const img1 = require("../assets/5.buttons.png");
 const webp1 = require("../assets/5.buttons.webp");
 const img2 = require("../assets/3.aarde.png");
@@ -24,8 +22,18 @@ const webp3 = require("../assets/ocean-klein.webp");
 const img4 = require("../assets/sky-klein.jpg");
 const webp4 = require("../assets/sky-klein.webp");
 
+const styles = {
+  image: {
+    width: "110vw"
+  },
+  homeLayer: {
+    position: "absolute",
+    top: "0"
+  }
+};
+
 class Background extends Component {
-  componentDidMount() {
+  componentWillMount() {
     // check if mobile
     if (this.context.isMobile) {
       console.log("is Mobile");
@@ -79,29 +87,38 @@ class Background extends Component {
 
   render() {
     return (
-      <div id="Background" name="Background">
+      <div style={{ position: "absolute", top: 0 }}>
         <div id="layer1">
-          <Img className="homeLayer" src={img1} webp={webp1} />
-        </div>
-        <div id="layer2">
           <Img
-            className="homeLayer"
+            style={{
+              ...styles.homeLayer,
+              width: "100vw",
+              height: "100vh",
+              zIndex: -1
+            }}
+            src={img1}
+            webp={webp1}
+          />
+        </div>
+        <div id="layer2" style={{ ...styles.homeLayer, zIndex: -2 }}>
+          <Img
+            style={{ ...styles.image }}
             src={img2}
             webp={webp2}
             alt="The second layer of the background"
           />
         </div>
-        <div id="layer3">
+        <div id="layer3" style={{ ...styles.homeLayer, zIndex: -3 }}>
           <Img
-            className="homeLayer"
+            style={{ ...styles.image }}
             src={img3}
             webp={webp3}
             alt="The third layer of the background"
           />
         </div>
-        <div id="layer4">
+        <div id="layer4" style={{ ...styles.homeLayer, zIndex: -4 }}>
           <Img
-            className="homeLayer"
+            style={{ ...styles.image }}
             src={img4}
             webp={webp4}
             alt="The fourth layer of the background"

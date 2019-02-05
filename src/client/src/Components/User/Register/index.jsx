@@ -180,7 +180,7 @@ class Register extends Component {
 
     return (
       <div id="register">
-        <Nav include={["LanguageSelect"]} />
+        <Nav wrap={true} include={["LanguageSelect"]} />
         <div className="container">
           <h1>{formLabels.title}</h1>
           <form noValidate onSubmit={this.Submit}>

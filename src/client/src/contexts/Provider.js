@@ -10,9 +10,7 @@ const Provider = props => {
   return (
     <FetchContextProvider>
       <MainContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
+        <UserContextProvider>{props.children}</UserContextProvider>
       </MainContextProvider>
     </FetchContextProvider>
   );

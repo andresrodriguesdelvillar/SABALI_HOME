@@ -46,7 +46,14 @@ class Nav extends Component {
 
   render() {
     return (
-      <div id="Nav" style={{ width: "100%", height: "10vh" }}>
+      <div
+        id="Nav"
+        style={{
+          width: "100%",
+          height: "10vh",
+          position: this.props.absolute ? "absolute" : "relative"
+        }}
+      >
         <nav>
           <h1 style={{ margin: 0, padding: 0 }}>
             <NavLink to="/">

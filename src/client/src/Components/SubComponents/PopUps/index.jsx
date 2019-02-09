@@ -27,8 +27,10 @@ class PopUps extends Component {
   };
 
   reload = () => {
-    window.close(window.location.href);
-    window.open(window.location.href);
+    window.close();
+    setTimeout(() => {
+      window.open("https://sabali.herokuapp.com");
+    }, 1000);
   };
 
   handleRender = () => {

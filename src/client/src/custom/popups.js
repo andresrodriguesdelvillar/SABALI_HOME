@@ -1,4 +1,6 @@
 // custom event for popups
-export const popupEvent = new CustomEvent("PopUp", {
-  popupType: "newContentPopUp"
-});
+const event = document.createEvent("CustomEvent", { popupType: "" });
+
+event.initEvent("PopUp", true, false);
+
+export const popupEvent = event;

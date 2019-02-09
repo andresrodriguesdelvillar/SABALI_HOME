@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 
+import Parallax from "parallax-js";
+
 import Img from "react-webp-image";
 
-//context
-import { mainContext } from "../../../contexts/contexts";
+// customImports
+import { parallaxOptions } from "../../../custom/parallaxConfigs";
 
-// customFuncs
-import {
-  getMousePosition,
-  mouseParallax,
-  getOrientation,
-  mobileParallax
-} from "../../../custom/deviceOrientation";
-
+// images
 const img1 = require("../assets/5.buttons.png");
 const webp1 = require("../assets/5.buttons.webp");
 const img2 = require("../assets/3.aarde.png");
@@ -24,74 +19,27 @@ const webp4 = require("../assets/sky-klein.webp");
 
 const styles = {
   image: {
-    width: "110vw"
+    width: "100%",
+    height: "100%"
   },
   homeLayer: {
-    position: "absolute",
-    top: "0"
+    width: "110%",
+    height: "110%",
+    top: "-5%"
   }
 };
 
-class Background extends Component {
-  componentWillMount() {
-    // check if mobile
-    if (this.context.isMobile) {
-      console.log("is Mobile");
-      // add Eventlistener for mobile device tilt
-      document.addEventListener(
-        "deviceorientation",
-        this.deviceOrientation,
-        true
-      );
-    } else {
-      console.log("is not mobile");
-      // add Eventlistener for mouseMovement on desktop
-      document.addEventListener("mousemove", this.mouseParallax, true);
-    }
+class HomeBackground extends Component {
+  componentDidMount() {
+    new Parallax(document.getElementById("HomeBackground"), parallaxOptions);
   }
-
-  componentWillUnmount() {
-    if (this.context.isMobile) {
-      document.removeEventListener(
-        "deviceorientation",
-        this.deviceOrientation,
-        true
-      );
-    } else {
-      document.removeEventListener("mousemove", this.mouseParallax, true);
-    }
-  }
-
-  mouseParallax = e => {
-    // creates Mouse Parallax
-    const mousePosition = getMousePosition(e);
-    const layers = {
-      layer2: [-32, -32],
-      layer3: [-16, -16],
-      layer4: [-9, -9]
-    };
-    mouseParallax(mousePosition, layers, 2);
-  };
-
-  deviceOrientation = e => {
-    // creates Device-tilt Parallax
-    const orientation = getOrientation(e);
-    this.setState({ deviceOrientation: orientation.tilt_horizontal });
-    const layers = {
-      layer2: [-32, -32],
-      layer3: [-16, -16],
-      layer4: [-9, -9]
-    };
-    mobileParallax(orientation, window.screen.orientation.type, 2, layers);
-  };
 
   render() {
     return (
-      <div style={{ position: "absolute", top: 0 }}>
-        <div id="layer1">
+      <div id="HomeBackground" style={{ zIndex: -1 }}>
+        <div data-depth="0.0" id="layer1">
           <Img
             style={{
-              ...styles.homeLayer,
               width: "100vw",
               height: "100vh",
               zIndex: -1
@@ -100,7 +48,7 @@ class Background extends Component {
             webp={webp1}
           />
         </div>
-        <div id="layer2" style={{ ...styles.homeLayer, zIndex: -2 }}>
+        <div id="layer2" data-depth="1" style={{ width: "110%", zIndex: -2 }}>
           <Img
             style={{ ...styles.image }}
             src={img2}
@@ -108,7 +56,11 @@ class Background extends Component {
             alt="The second layer of the background"
           />
         </div>
-        <div id="layer3" style={{ ...styles.homeLayer, zIndex: -3 }}>
+        <div
+          id="layer3"
+          data-depth="0.6"
+          style={{ ...styles.homeLayer, zIndex: -3 }}
+        >
           <Img
             style={{ ...styles.image }}
             src={img3}
@@ -116,7 +68,11 @@ class Background extends Component {
             alt="The third layer of the background"
           />
         </div>
-        <div id="layer4" style={{ ...styles.homeLayer, zIndex: -4 }}>
+        <div
+          id="layer4"
+          data-depth="0.3"
+          style={{ ...styles.homeLayer, zIndex: -4 }}
+        >
           <Img
             style={{ ...styles.image }}
             src={img4}
@@ -129,6 +85,4 @@ class Background extends Component {
   }
 }
 
-Background.contextType = mainContext;
-
-export default Background;
+export default HomeBackground;

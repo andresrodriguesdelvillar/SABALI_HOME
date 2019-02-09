@@ -64,6 +64,7 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // Trigger Popup event for newContent popup
+
               popupEvent.popupType = "newContent";
               document.dispatchEvent(popupEvent);
               console.log(

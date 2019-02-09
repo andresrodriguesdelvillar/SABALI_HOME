@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
 
 import Loadable from "react-loadable";
 // style
@@ -13,8 +12,12 @@ const PopUps = Loadable({
   loader: () => import("./Components/SubComponents/PopUps"),
   loading: Loading
 });
-const Home = Loadable({
-  loader: () => import("./Components/Home"),
+const HomeContact = Loadable({
+  loader: () => import("./Components/HomeContact"),
+  loading: Loading
+});
+const Contact = Loadable({
+  loader: () => import("./Components/Contact"),
   loading: Loading
 });
 const Register = Loadable({
@@ -34,21 +37,17 @@ const ConfirmEmailError = Loadable({
   loading: Loading
 });
 
-const Contact = Loadable({
-  loader: () => import("./Components/Contact"),
-  loading: Loading
-});
-
 class App extends Component {
   state = {
     popup: false,
-    appearHome: true
+    enter: true,
+    exit: true
   };
   componentWillMount() {
-    document.addEventListener("PopUp", this.newContentPopUp, { passive: true });
+    document.addEventListener("PopUp", this.handlePopUp, false);
   }
 
-  newContentPopUp = e => {
+  handlePopUp = e => {
     console.log(e.popupType);
     this.setState({ popup: e.popupType });
   };
@@ -59,16 +58,12 @@ class App extends Component {
         <div className="App">
           {this.state.popup ? <PopUps popup={this.state.popup} /> : null}
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/contact" component={Contact} />
-            <Route path="/register" exact component={Register} />
-            <Route path="/login" exact component={Login} />
-            <Route path="/confirmemail" exact component={ConfirmEmail} />
-            <Route
-              path="/confirmemailerror"
-              exact
-              component={ConfirmEmailError}
-            />
+            <Route exact path="/" component={HomeContact} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <Route path="/confirmemail" component={ConfirmEmail} />
+            <Route path="/confirmemailerror" component={ConfirmEmailError} />
           </Switch>
         </div>
       </Router>

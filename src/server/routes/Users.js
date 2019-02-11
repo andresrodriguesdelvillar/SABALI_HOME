@@ -11,6 +11,7 @@ import express from "express";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { generator as PwdGenerator } from "generate-password";
 
 /*____CONFIGS_____
 
@@ -498,7 +499,7 @@ user.post("/login", (req, res) => {
 @route   POST /user/resetpassword
 @desc    reset password
 @access  Public
-@requires: Email
+@requires: Email, Language
 */
 
 user.post("/resetpassword/send", (req, res) => {
@@ -507,6 +508,26 @@ user.post("/resetpassword/send", (req, res) => {
     res.status(400).send({ error: "bad request" });
     return;
   }
+
+  const newPwd = PwdGenerator({
+    length: 8,
+    numbers: true
+  });
+
+  const response = {};
+
+  User.findOne({ Email: req.body.Email }).then(user => {
+    if (!user) {
+      res.status(400).send({ success: false, error: "notFound" });
+    } else if (user) {
+      user.Password = newPwd;
+      user.save();
+      response.success = true;
+    } else {
+      res.status(500).send({ success: false, error: "Server" });
+    }
+  });
+
   const payload = {
     Email: req.body.Email
   };
@@ -519,25 +540,16 @@ user.post("/resetpassword/send", (req, res) => {
     req.get("host") +
     "/user/resetpassword/reset/" +
     token;
-  SendResetPassMail(req.body.Email, Link)
-    .then(result => {
-      res.status(200).send({ success: true });
-    })
-    .catch(err => {
-      res.status(400).send({ success: false, error: err });
-    });
-});
 
-user.get("/testing", (req, res) => {
-  testTemplate()
-    .then(result => {
-      console.log(result);
-      res.send(result);
-    })
-    .catch(err => {
-      console.log(err);
-      res.send(err);
-    });
+  if (response.success === true) {
+    SendResetPassMail(req.body.Email, Link, newPwd, req.body.Language)
+      .then(result => {
+        res.status(200).send({ success: true });
+      })
+      .catch(err => {
+        res.status(400).send({ success: false, error: err });
+      });
+  }
 });
 
 export default user;

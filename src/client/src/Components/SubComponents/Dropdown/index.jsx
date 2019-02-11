@@ -2,21 +2,22 @@ import React, { Component } from "react";
 
 import anime from "animejs";
 import { generate } from "shortid";
+import { Transition } from "react-transition-group";
 
 import "./style.scss";
 
-const generalClass = generate();
+const dropDownItemClass = generate();
 
 export class DropDown extends Component {
+  animationDuration = 200;
+
   state = {
     open: false,
-    button_ID: ""
+    dropDown_ID: ""
   };
 
-  animationDuration = 1000;
-
   componentWillMount() {
-    this.setState({ button_ID: generate() });
+    this.setState({ dropDown_ID: generate() });
     document.addEventListener("mouseup", this.handleOutsiteClick, true);
   }
 
@@ -26,31 +27,29 @@ export class DropDown extends Component {
 
   handleOutsiteClick = e => {
     e.preventDefault();
-    const wrapper = document.getElementById(this.state.button_ID);
+    const wrapper = document.getElementById(this.state.dropDown_ID);
 
     if (!wrapper.contains(e.target) && this.state.open) {
-      this.animateMenuOut();
-      setTimeout(() => {
-        this.setState({ open: false });
-      }, this.animationDuration);
+      this.setState({ open: false });
     }
   };
 
-  componentDidUpdate() {
-    if (this.state.open) {
-      console.log("should animate");
-      this.animateMenuIn();
+  toggle = e => {
+    e.preventDefault();
+    this.setState({ open: !this.state.open });
+  };
+
+  handleClose = e => {
+    if (e.target.parentNode.tagName !== "A") {
+      this.setState({ open: false });
     }
-  }
+  };
 
   animateMenuIn = () => {
-    console.log(this.props.children[1].props.children.length * 100);
     anime({
-      targets: `.${generalClass}`,
+      targets: `.${dropDownItemClass}`,
       duration: this.animationDuration,
       easing: "spring(10, 60, 70, 7)",
-      elasticity: 300,
-      delay: anime.stagger(50, { direction: "reverse" }),
       translateY: [
         anime.stagger([
           "-100%",
@@ -63,11 +62,9 @@ export class DropDown extends Component {
 
   animateMenuOut = () => {
     anime({
-      targets: `.${generalClass}`,
+      targets: `.${dropDownItemClass}`,
       duration: this.animationDuration,
-      elasticity: 300,
-      easing: "linear",
-      delay: anime.stagger(50),
+      easing: "spring(10, 60, 70, 7)",
       translateY: [
         0,
         anime.stagger([
@@ -77,31 +74,28 @@ export class DropDown extends Component {
       ]
     });
   };
-
-  toggle = e => {
-    e.preventDefault();
-    if (this.state.open) {
-      this.animateMenuOut();
-      setTimeout(() => {
-        this.setState({ open: false });
-      }, this.animationDuration);
-    } else {
-      this.setState({ open: true });
-    }
-  };
-
-  handleClose = e => {
-    if (e.target.parentNode.tagName !== "A") {
-      this.setState({ open: false });
-    }
-  };
   render() {
     return (
-      <div className="dropdown" id={this.state.button_ID}>
+      <div
+        style={{ width: "100%" }}
+        {...this.props}
+        className="dropdown"
+        id={this.state.dropDown_ID}
+      >
         <div onClick={this.toggle}>{this.props.children[0]}</div>
-        <div onClick={this.handleClose}>
-          {this.state.open ? this.props.children[1] : null}
-        </div>
+        <Transition
+          style={{ width: "100%" }}
+          appear={true}
+          in={this.state.open}
+          enter={true}
+          exit={true}
+          unmountOnExit
+          timeout={this.animationDuration}
+          onEnter={() => this.animateMenuIn()}
+          onExit={() => this.animateMenuOut()}
+        >
+          <div onClick={this.handleClose}>{this.props.children[1]}</div>
+        </Transition>
       </div>
     );
   }
@@ -123,15 +117,16 @@ export const DropDownMenu = props => {
   );
 };
 
-const styles = {
-  cursor: "pointer",
-  backgroundColor: "transparent",
-  border: "none",
-  outline: "none"
-};
-
 export const DropDownButton = props => {
   const clickDuration = 200;
+
+  const styles = {
+    cursor: "pointer",
+    width: "100%",
+    backgroundColor: "transparent",
+    border: "none",
+    outline: "none"
+  };
 
   const animateClick = el => {
     anime({
@@ -155,9 +150,12 @@ export const DropDownButton = props => {
 };
 
 export const DropDownItem = props => {
-  console.log(props.children);
   return (
-    <div {...props} className={`${generalClass} dropdownItem`}>
+    <div
+      {...props}
+      style={{ margin: 0, padding: 0 }}
+      className={`${dropDownItemClass} dropdownItem`}
+    >
       {props.children}
     </div>
   );

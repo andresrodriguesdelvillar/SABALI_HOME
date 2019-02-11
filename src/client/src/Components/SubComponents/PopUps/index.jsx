@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Alert } from "reactstrap";
+import { Snackbar, IconButton } from "@material-ui/core";
 
 import { alerts } from "../../../custom/language";
 import { mainContext } from "../../../contexts/contexts";
@@ -9,21 +9,7 @@ import "./style.scss";
 
 class PopUps extends Component {
   state = {
-    timer: 10
-  };
-
-  componentDidMount() {
-    this.handleTimer();
-  }
-
-  handleTimer = () => {
-    const interval = setInterval(() => {
-      if (this.state.timer < 1) {
-        this.setState({ timer: 0 });
-        clearInterval(interval);
-      }
-      this.setState({ timer: this.state.timer - 1 });
-    }, 1000);
+    open: true
   };
 
   reload = () => {
@@ -33,13 +19,49 @@ class PopUps extends Component {
     }, 1000);
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   handleRender = () => {
     const text = alerts[this.context.language];
     switch (this.props.popup) {
       case "newContent":
         return (
           <div className="popup">
-            <Alert color="info" id="newContentPopup" style={{ margin: 0 }}>
+            <Snackbar
+              style={{ width: "100%" }}
+              fullWidth
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              open={this.state.open}
+              ContentProps={{
+                "aria-describedby": "newContent"
+              }}
+              message={
+                <span id="newContent">
+                  {text.newContent._1}
+                  <span
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    onClick={this.reload}
+                    id="popUpReloader"
+                  >
+                    {text.newContent.b}
+                  </span>
+                  {text.newContent._2}
+                </span>
+              }
+              action={
+                <IconButton
+                  key="close"
+                  aria-label="Close"
+                  color="inherit"
+                  onClick={this.handleClose}
+                >
+                  &times;
+                </IconButton>
+              }
+            />
+            {/* <Alert color="info" id="newContentPopup" style={{ margin: 0 }}>
               {text.newContent._1}
               <span
                 style={{ cursor: "pointer", fontWeight: "bold" }}
@@ -49,15 +71,35 @@ class PopUps extends Component {
                 {text.newContent.b}
               </span>
               {text.newContent._2}
-            </Alert>
+            </Alert> */}
           </div>
         );
       case "appCached":
         return (
           <div className="popup">
-            <Alert color="info" id="ActiveServiceWorker" style={{ margin: 0 }}>
+            <Snackbar
+              style={{ width: "100%" }}
+              fullWidth
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              open={this.state.open}
+              ContentProps={{
+                "aria-describedby": "newContent"
+              }}
+              message={"The Webapp can now be used offline."}
+              action={
+                <IconButton
+                  key="close"
+                  aria-label="Close"
+                  color="inherit"
+                  onClick={this.handleClose}
+                >
+                  &times;
+                </IconButton>
+              }
+            />
+            {/* <Alert color="info" id="ActiveServiceWorker" style={{ margin: 0 }}>
               The Webapp can now be used offline.
-            </Alert>
+            </Alert> */}
           </div>
         );
       default:
@@ -66,7 +108,7 @@ class PopUps extends Component {
   };
 
   render() {
-    return this.state.timer > 0 ? this.handleRender() : null;
+    return this.handleRender();
   }
 }
 

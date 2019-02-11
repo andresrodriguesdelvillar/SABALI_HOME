@@ -8,23 +8,15 @@ import { mainContext } from "../../../../../contexts/contexts";
 //assets
 import english from "./assets/svg/english.svg";
 import english_wit from "./assets/svg/english-wit.svg";
-import webp_english from "./assets/webp/english.webp";
-import webp_english_wit from "./assets/webp/english-wit.webp";
 
 import deutsch from "./assets/svg/deutsch.svg";
 import deutsch_wit from "./assets/svg/deutsch-wit.svg";
-import webp_deutsch from "./assets/webp/deutsch.webp";
-import webp_deutsch_wit from "./assets/webp/deutsch-wit.webp";
 
 import nederlands from "./assets/svg/nederlands.svg";
 import nederlands_wit from "./assets/svg/nederlands-wit.svg";
-import webp_nederlands from "./assets/webp/nederlands.webp";
-import webp_nederlands_wit from "./assets/webp/nederlands-wit.webp";
 
 import espanol from "./assets/svg/espanol.svg";
 import espanol_wit from "./assets/svg/espanol-wit.svg";
-import webp_espanol from "./assets/webp/espanol.webp";
-import webp_espanol_wit from "./assets/webp/espanol-wit.webp";
 
 // components
 import {
@@ -35,10 +27,21 @@ import {
 } from "../../../Dropdown";
 
 class LanguageSelect extends Component {
+  languageImages = {
+    en: <Img src={this.props.wit ? english_wit : english} alt="english" />,
+    de: <Img src={this.props.wit ? deutsch_wit : deutsch} alt="deutsch" />,
+    nl: (
+      <Img
+        src={this.props.wit ? nederlands_wit : nederlands}
+        alt="nederlands"
+      />
+    ),
+    es: <Img src={this.props.wit ? espanol_wit : espanol} alt="español" />
+  };
   changeLang = e => {
     e.preventDefault();
-    localStorage.userLanguage = e.target.value;
-    this.context.update("language", e.target.value);
+    localStorage.userLanguage = e.target.id;
+    this.context.update("language", e.target.id);
   };
 
   render() {
@@ -46,51 +49,48 @@ class LanguageSelect extends Component {
       <div
         id="languageSelect"
         style={{
+          position: "absolute",
           margin: "0.5em 1em 0 0",
-          float: "right",
-          minWidth: "48px"
+          right: 0,
+          width: "15vw",
+          minWidth: "120px"
         }}
       >
         <DropDown>
           <DropDownButton>
-            <Img
-              style={{ float: "left", minWidth: "100px", width: "15vw" }}
-              src={this.props.wit ? english_wit : english}
-              webp={this.props.wit ? webp_english_wit : webp_english}
-              alt="Sabali Logo"
-            />
+            {this.languageImages[this.context.language]}
           </DropDownButton>
           <DropDownMenu>
             <DropDownItem>
               <Img
-                style={{ float: "left", minWidth: "100px", width: "15vw" }}
+                id="en"
+                onClick={this.changeLang}
                 src={this.props.wit ? english_wit : english}
-                webp={this.props.wit ? webp_english_wit : webp_english}
-                alt="Sabali Logo"
+                alt="english"
               />
             </DropDownItem>
             <DropDownItem>
               <Img
-                style={{ float: "left", minWidth: "100px", width: "15vw" }}
+                id="de"
+                onClick={this.changeLang}
                 src={this.props.wit ? deutsch_wit : deutsch}
-                webp={this.props.wit ? webp_deutsch_wit : webp_deutsch}
-                alt="Sabali Logo"
+                alt="deutsch"
               />
             </DropDownItem>
             <DropDownItem>
               <Img
-                style={{ float: "left", minWidth: "100px", width: "15vw" }}
+                id="nl"
+                onClick={this.changeLang}
                 src={this.props.wit ? nederlands_wit : nederlands}
-                webp={this.props.wit ? webp_nederlands_wit : webp_nederlands}
-                alt="Sabali Logo"
+                alt="nederlands"
               />
             </DropDownItem>
             <DropDownItem>
               <Img
-                style={{ float: "left", minWidth: "100px", width: "15vw" }}
+                id="es"
+                onClick={this.changeLang}
                 src={this.props.wit ? espanol_wit : espanol}
-                webp={this.props.wit ? webp_espanol_wit : webp_espanol}
-                alt="Sabali Logo"
+                alt="español"
               />
             </DropDownItem>
           </DropDownMenu>

@@ -42,6 +42,7 @@ class HomeContact extends Component {
 
       setTimeout(() => {
         window.history.pushState(null, "Contact", "/contact");
+        this.setState({ toRender: "Contact" });
       }, this.timeout);
     }
   }

@@ -213,7 +213,10 @@ export const login = {
     },
     loginErrors: {
       Email: "This Email is not registered",
-      Password: "The Password you have entered is wrong",
+      Password: {
+        text: "The Password you have entered is wrong.",
+        link: "forgot password"
+      },
       Confirmed:
         "The Email is not confirmed. Please confirm your Email to login",
       Server: "Oops, there has been a server error, please try again"
@@ -238,7 +241,10 @@ export const login = {
     },
     loginErrors: {
       Email: "Diese Email ist nicht registriert",
-      Password: "Das eingegebene Passwort ist falsch",
+      Password: {
+        text: "Das eingegebene Passwort ist falsch.",
+        link: "Passwort vergessen"
+      },
       Confirmed:
         "Diese Emailadresse ist nicht bestätigt. Bitte bestätigen sie die Emailadresse um sich an zu melden",
       Server:
@@ -266,7 +272,10 @@ export const login = {
 
     loginErrors: {
       Email: "Deze Email is ons niet bekent",
-      Password: "De wachtwoord is fout",
+      Password: {
+        text: "De wachtwoord is fout.",
+        link: "Wachtwoord vergeten"
+      },
       Confirmed:
         "Deze Email is niet bevestigt. U moet de Email bevestigen om U aan te melden",
       Server:
@@ -293,7 +302,11 @@ export const login = {
 
     loginErrors: {
       Email: "Este email no esta registrado",
-      Password: "La contraseña esta mal",
+      Password: {
+        text: "La contraseña esta mal.",
+        link: "Wachtwoord vergeten"
+      },
+
       Confirmed:
         "Este correo electrónico no esta registrado. Tienes que activarlo",
       Server: "Hay un problemita con el servidor, por favor trate de nuevo"

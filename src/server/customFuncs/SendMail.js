@@ -36,10 +36,10 @@ export const SendConfMail = async (receiver, link, language) => {
   }
 };
 
-export const SendResetPassMail = async (receiver, link) => {
+export const SendResetPassMail = async (receiver, link, code, language) => {
   const body = {
     emailTo: [receiver],
-    attributes: { Link: link, Email: receiver }
+    attributes: { Link: link, Code: code }
   };
   const options = {
     method: "post",
@@ -47,8 +47,26 @@ export const SendResetPassMail = async (receiver, link) => {
     headers: { "Content-Type": "application/json", "api-key": sendinBlue_API }
   };
 
-  return fetch(
-    "https://api.sendinblue.com/v3/smtp/templates/6/send",
-    options
-  ).then(res => res.json());
+  switch (language) {
+    case "de":
+      return fetch(
+        "https://api.sendinblue.com/v3/smtp/templates/10/send",
+        options
+      ).then(res => res.json());
+    case "nl":
+      return fetch(
+        "https://api.sendinblue.com/v3/smtp/templates/6/send",
+        options
+      ).then(res => res.json());
+    case "es":
+      return fetch(
+        "https://api.sendinblue.com/v3/smtp/templates/6/send",
+        options
+      ).then(res => res.json());
+    default:
+      return fetch(
+        "https://api.sendinblue.com/v3/smtp/templates/6/send",
+        options
+      ).then(res => res.json());
+  }
 };

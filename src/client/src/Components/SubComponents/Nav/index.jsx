@@ -39,7 +39,7 @@ class Nav extends Component {
       for (let i in elements) {
         switch (elements[i]) {
           case "LanguageSelect":
-            toSet.push(<LanguageSelect />);
+            toSet.push(<LanguageSelect wit={this.props.wit} />);
             break;
           case "ClientMenu":
             toSet.push(<ClientMenu wit={this.props.wit} />);
@@ -68,7 +68,7 @@ class Nav extends Component {
     return (
       <nav
         style={{
-          width: "100%",
+          width: "100vw",
           height: "10vh",
           position: this.props.absolute ? "absolute" : "relative"
         }}

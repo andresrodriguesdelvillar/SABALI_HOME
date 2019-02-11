@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 
 import Img from "react-webp-image";
 
@@ -7,9 +7,6 @@ import { Link } from "react-router-dom";
 // assets
 import client from "../../assets/client.svg";
 import client_wit from "../../assets/client-wit.svg";
-
-import client_webp from "../../assets/client.webp";
-import client_wit_webp from "../../assets/client-wit.webp";
 
 // custom Imports
 import { clientLinks } from "../../../../../custom/language";

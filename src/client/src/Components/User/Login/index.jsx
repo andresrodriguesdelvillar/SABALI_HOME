@@ -61,6 +61,22 @@ class Login extends Component {
     return false;
   };
 
+  handleResetPassword = e => {
+    e.preventDefault();
+    this.props.context
+      .post(
+        { Email: this.state.Email, Language: this.context.language },
+        "/user/resetpassword/send"
+      )
+      .then(res => res.json())
+      .then(res => {
+        if (res.success) {
+          this.props.history.push("/passwordreset?Email=" + this.state.Email);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
   render() {
     const formInputs = login[this.context.language];
     const Submit = e => {
@@ -85,7 +101,29 @@ class Login extends Component {
                 });
                 break;
               case "Password":
-                this.setState({ loginError: formInputs.loginErrors.Password });
+                this.setState({
+                  loginError: (
+                    <span>
+                      {formInputs.loginErrors.Password.text}
+                      <br />
+                      <button
+                        style={{
+                          color: "-webkit-link",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                          display: "inline",
+                          margin: 0,
+                          padding: 0
+                        }}
+                        onClick={this.handleResetPassword}
+                      >
+                        {formInputs.loginErrors.Password.link}
+                      </button>
+                    </span>
+                  )
+                });
                 break;
               default:
                 this.setState({ loginError: formInputs.loginErrors.Server });

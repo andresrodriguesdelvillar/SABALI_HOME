@@ -1,7 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
 import Provider from "./contexts/Provider";
-import "bootstrap/dist/css/bootstrap.css";
 import * as serviceWorker from "./serviceWorker";
 
 render(<Provider />, document.getElementById("root"));

@@ -1,8 +1,6 @@
 // general imports
 import React, { Component } from "react";
 
-import { FormControl, TextField, Button } from "@material-ui/core";
-
 //custom Imports
 import { register } from "../../../custom/language";
 import { errorColor } from "../../../custom/colors";
@@ -14,6 +12,12 @@ import { mainContext, fetchContext } from "../../../contexts/contexts";
 
 // Components
 import Nav from "../../SubComponents/Nav";
+import {
+  Title,
+  Input,
+  Form,
+  SubmitButton
+} from "../../SubComponents/FormComponents";
 
 class Register extends Component {
   state = {
@@ -182,63 +186,61 @@ class Register extends Component {
       <div id="register">
         <Nav wrap={true} include={["LanguageSelect"]} />
         <div className="container">
-          <h1>{formLabels.title}</h1>
-          <form noValidate onSubmit={this.Submit}>
-            <FormControl fullWidth>
-              <TextField
-                helperText={printError("Name")}
-                id="Name"
-                label={formLabels.Name.label}
-                onChange={this.onChange}
-              />
-              <TextField
-                helperText={printError("Company")}
-                id="Company"
-                label={formLabels.Company.label}
-                onChange={this.onChange}
-              />
-              <TextField
-                helperText={printError("Email")}
-                required
-                type="email"
-                id="Email"
-                autoComplete="email"
-                label={formLabels.Email.label}
-                onChange={this.onChange}
-              />
-              <TextField
-                helperText={printError("Password")}
-                required
-                type="password"
-                id="Password"
-                autoComplete="new-password"
-                label={formLabels.Password.label}
-                onChange={this.onChange}
-              />
-              <TextField
-                required
-                helperText={printError("ConfPass")}
-                type="password"
-                id="ConfPass"
-                autoComplete="new-password"
-                label={formLabels.ConfPass.label}
-                onChange={this.onChange}
-              />
-              <p style={{ color: errorColor, marginTop: "1.5em" }}>
-                {this.state.registrationError}
-              </p>
-              <Button
-                style={{ margin: "1.85em auto" }}
-                type="submit"
-                className="submitButton"
-                variant="contained"
-                color="primary"
-                disabled={this.handle_Submit_disabling()}
-              >
-                {formLabels.submitButton}
-              </Button>
-            </FormControl>
-          </form>
+          <Title>{formLabels.title}</Title>
+          <Form noValidate onSubmit={this.Submit}>
+            <Input
+              error={printError("Name")}
+              id="Name"
+              label={formLabels.Name.label}
+              onChange={this.onChange}
+            />
+            <Input
+              error={printError("Company")}
+              id="Company"
+              label={formLabels.Company.label}
+              onChange={this.onChange}
+            />
+            <Input
+              error={printError("Email")}
+              required
+              type="email"
+              id="Email"
+              autoComplete="email"
+              label={formLabels.Email.label}
+              onChange={this.onChange}
+            />
+            <Input
+              error={printError("Password")}
+              required
+              type="password"
+              id="Password"
+              autoComplete="new-password"
+              label={formLabels.Password.label}
+              onChange={this.onChange}
+            />
+            <Input
+              required
+              error={printError("ConfPass")}
+              type="password"
+              id="ConfPass"
+              autoComplete="new-password"
+              label={formLabels.ConfPass.label}
+              onChange={this.onChange}
+            />
+            <p style={{ color: errorColor, marginTop: "1.5em" }}>
+              {this.state.registrationError}
+            </p>
+            <SubmitButton
+              style={{ margin: "1.85em auto" }}
+              type="submit"
+              className="submitButton"
+              variant="contained"
+              color="primary"
+              disabled={this.handle_Submit_disabling()}
+            >
+              {formLabels.submitButton}
+            </SubmitButton>
+          </Form>
         </div>
       </div>
     );

@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 
-import { FormControl, TextField, Button } from "@material-ui/core";
-
 // subComponents
+import {
+  Title,
+  Form,
+  Input,
+  SubmitButton
+} from "../../SubComponents/FormComponents";
 import Nav from "../../SubComponents/Nav";
 import ResendEmail from "../../SubComponents/ResendEmail";
 
@@ -152,47 +156,45 @@ class Login extends Component {
       <div id="Login">
         <Nav include={["LanguageSelect"]} />
         <div className="container">
-          <h1>{formInputs.title}</h1>
-          <form noValidate onSubmit={Submit}>
-            <FormControl fullWidth>
-              <TextField
-                label={formInputs.Email.label}
-                helperText={printEmailErrors()}
-                id="Email"
-                type="email"
-                autoComplete="email"
-                value={this.state.Email}
-                required
-                onChange={this.onChange}
-              />
-              <TextField
-                label={formInputs.Password.label}
-                id="Password"
-                type="password"
-                autoComplete="current-password"
-                required
-                onChange={this.onChange}
-              />
-              <p style={{ color: errorColor, marginTop: "1.5em" }}>
-                {this.state.loginError}
-              </p>
-              {this.state.resendConfMail ? (
-                <ResendEmail Email={this.state.Email} />
-              ) : (
-                <Button
-                  style={{ margin: "1.75em auto" }}
-                  className="submitButton"
-                  id="SubmitLoginButton"
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={this.handle_submitDisabling()}
-                >
-                  {formInputs.submitButton}
-                </Button>
-              )}
-            </FormControl>
-          </form>
+          <Title>{formInputs.title}</Title>
+          <Form onSubmit={Submit}>
+            <Input
+              label={formInputs.Email.label}
+              error={printEmailErrors()}
+              id="Email"
+              type="email"
+              autoComplete="email"
+              value={this.state.Email}
+              required
+              onChange={this.onChange}
+            />
+            <Input
+              label={formInputs.Password.label}
+              id="Password"
+              type="password"
+              autoComplete="current-password"
+              required
+              onChange={this.onChange}
+            />
+            <p style={{ color: errorColor, marginTop: "1.5em" }}>
+              {this.state.loginError}
+            </p>
+            {this.state.resendConfMail ? (
+              <ResendEmail Email={this.state.Email} />
+            ) : (
+              <SubmitButton
+                style={{ margin: "1.75em auto" }}
+                className="submitButton"
+                id="SubmitLoginButton"
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={this.handle_submitDisabling()}
+              >
+                {formInputs.submitButton}
+              </SubmitButton>
+            )}
+          </Form>
         </div>
       </div>
     );

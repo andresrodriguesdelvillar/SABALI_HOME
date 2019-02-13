@@ -53,6 +53,7 @@ class LanguageSelect extends Component {
           margin: "0.5em 1em 0 0",
           right: 0,
           width: "15vw",
+          height: "100",
           minWidth: "120px"
         }}
       >

@@ -1,114 +1,95 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 
-import anime from "animejs";
 import { generate } from "shortid";
-import { Transition } from "react-transition-group";
+import { useSprings, animated, useSpring } from "react-spring";
 
-import "./style.scss";
+export const DropDown = props => {
+  // general vars
+  const animationDuration = 300;
+  const Menu_ID = generate();
 
-const dropDownItemClass = generate();
+  // useState
+  const [open, setOpen] = useState(false);
 
-export class DropDown extends Component {
-  animationDuration = 200;
+  // setSprings for animation
 
-  state = {
-    open: false,
-    dropDown_ID: ""
-  };
+  const [springs, set] = useSprings(
+    props.children[1].props.children.length,
+    i => ({
+      transform: `translateY(${(i + 1) * -100}%)`,
+      config: { mass: 2, friction: 20, tension: 150 }
+    })
+  );
 
-  componentWillMount() {
-    this.setState({ dropDown_ID: generate() });
-    document.addEventListener("mouseup", this.handleOutsiteClick, true);
-  }
+  useEffect(() => {
+    document.addEventListener("mouseup", handleOutsiteClick, true);
+    return () =>
+      document.removeEventListener("mouseup", handleOutsiteClick, true);
+  });
 
-  componentWillUnmount() {
-    document.removeEventListener("mouseup", this.handleOutsiteClick, true);
-  }
-
-  handleOutsiteClick = e => {
+  const handleOutsiteClick = e => {
     e.preventDefault();
-    const wrapper = document.getElementById(this.state.dropDown_ID);
+    const wrapper = document.getElementById(Menu_ID);
 
-    if (!wrapper.contains(e.target) && this.state.open) {
-      this.setState({ open: false });
+    if (!wrapper.contains(e.target) && open) {
+      set(i => ({
+        transform: `translateY(${(i + 1) * -100}%)`
+      }));
+      setTimeout(() => {
+        setOpen(false);
+      }, animationDuration);
     }
   };
 
-  toggle = e => {
+  const toggle = e => {
     e.preventDefault();
-    this.setState({ open: !this.state.open });
+    if (open) {
+      set(i => ({
+        transform: `translateY(${(i + 1) * -100}%)`
+      }));
+      setTimeout(() => {
+        setOpen(false);
+      }, animationDuration);
+    } else {
+      setOpen(true);
+      set({
+        transform: `translateY(0)`
+      });
+    }
   };
 
-  handleClose = e => {
+  const handleClose = e => {
     if (e.target.parentNode.tagName !== "A") {
-      this.setState({ open: false });
+      set(i => ({
+        transform: `translateY(${(i + 1) * -100}%)`
+      }));
+      setTimeout(() => {
+        setOpen(false);
+      }, animationDuration);
     }
   };
-
-  animateMenuIn = () => {
-    anime({
-      targets: `.${dropDownItemClass}`,
-      duration: this.animationDuration,
-      easing: "spring(10, 60, 70, 7)",
-      translateY: [
-        anime.stagger([
-          "-100%",
-          `-${this.props.children[1].props.children.length * 100}%`
-        ]),
-        0
-      ]
-    });
-  };
-
-  animateMenuOut = () => {
-    anime({
-      targets: `.${dropDownItemClass}`,
-      duration: this.animationDuration,
-      easing: "spring(10, 60, 70, 7)",
-      translateY: [
-        0,
-        anime.stagger([
-          "-100%",
-          `-${this.props.children[1].props.children.length * 100}%`
-        ])
-      ]
-    });
-  };
-  render() {
-    return (
-      <div
-        style={{ width: "100%" }}
-        {...this.props}
-        className="dropdown"
-        id={this.state.dropDown_ID}
-      >
-        <div onClick={this.toggle}>{this.props.children[0]}</div>
-        <Transition
-          style={{ width: "100%" }}
-          appear={true}
-          in={this.state.open}
-          enter={true}
-          exit={true}
-          unmountOnExit
-          timeout={this.animationDuration}
-          onEnter={() => this.animateMenuIn()}
-          onExit={() => this.animateMenuOut()}
-        >
-          <div onClick={this.handleClose}>{this.props.children[1]}</div>
-        </Transition>
-      </div>
-    );
-  }
-}
-
-export default DropDown;
+  return (
+    <div id={Menu_ID} style={{ width: "100%" }}>
+      <div onClick={toggle}>{props.children[0]}</div>
+      {open ? (
+        <DropDownMenu {...props.children[1].props} onClick={handleClose}>
+          {springs.map((animeprops, i) => (
+            <animated.div key={i} style={animeprops}>
+              {props.children[1].props.children[i]}
+            </animated.div>
+          ))}
+        </DropDownMenu>
+      ) : null}
+    </div>
+  );
+};
 
 export const DropDownMenu = props => {
   const styles = {
-    cursor: "pointer",
     width: "80%",
     margin: "0 auto",
-    marginTop: "0.5em"
+    marginTop: "0.5em",
+    cursor: "pointer"
   };
   return (
     <div {...props} style={styles}>
@@ -118,8 +99,6 @@ export const DropDownMenu = props => {
 };
 
 export const DropDownButton = props => {
-  const clickDuration = 200;
-
   const styles = {
     cursor: "pointer",
     width: "100%",
@@ -128,35 +107,50 @@ export const DropDownButton = props => {
     outline: "none"
   };
 
-  const animateClick = el => {
-    anime({
-      targets: el,
-      duration: clickDuration,
-      easing: "spring(10, 60, 70, 7)",
-      scale: [1, 1.1, 1]
-    });
-  };
+  const [spring, set] = useSpring(() => ({ transform: "scale(1)" }));
 
-  const onClick = e => {
-    animateClick(`#${e.target.id}`);
+  const onMouseDown = e => {
+    e.preventDefault();
+    set({ transform: "scale(0.9)" });
+  };
+  const onMouseUp = e => {
+    e.preventDefault();
+    set({ transform: "scale(1)" });
   };
   return (
-    <div onClick={onClick}>
+    <animated.div
+      style={spring}
+      onMouseUp={onMouseUp}
+      onMouseDown={onMouseDown}
+    >
       <button {...props} style={styles}>
         {props.children}
       </button>
-    </div>
+    </animated.div>
   );
 };
 
 export const DropDownItem = props => {
+  const [spring, set] = useSpring(() => ({ transform: "scale(1)" }));
+
+  const hover = e => {
+    e.preventDefault();
+    set({ transform: "scale(1.1)" });
+  };
+
+  const leave = e => {
+    e.preventDefault();
+    set({ transform: "scale(1)" });
+  };
+
   return (
-    <div
+    <animated.div
+      onMouseEnter={hover}
+      onMouseLeave={leave}
+      style={spring}
       {...props}
-      style={{ margin: 0, padding: 0 }}
-      className={`${dropDownItemClass} dropdownItem`}
     >
       {props.children}
-    </div>
+    </animated.div>
   );
 };

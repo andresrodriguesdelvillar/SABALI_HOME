@@ -47,7 +47,7 @@ const AnimatedRoute = ({ location }) => {
     set({ opacity: 1, display: "block" });
   };
   return transitions.map(({ item, props, key }) => (
-    <div key={key}>
+    <div key={key} style={{ position: "relative", overflow: "hidden" }}>
       {location.pathname === "/" || location.pathname === "/contact" ? (
         <nav
           style={{

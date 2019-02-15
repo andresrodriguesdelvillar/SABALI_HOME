@@ -15,14 +15,6 @@ const PopUps = Loadable({
   loader: () => import("./Components/SubComponents/PopUps"),
   loading: Loading
 });
-const HomeContact = Loadable({
-  loader: () => import("./Components/HomeContact"),
-  loading: Loading
-});
-const Contact = Loadable({
-  loader: () => import("./Components/Contact"),
-  loading: Loading
-});
 const Register = Loadable({
   loader: () => import("./Components/User/Register"),
   loading: Loading

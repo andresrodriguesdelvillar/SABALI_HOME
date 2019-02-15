@@ -8,15 +8,18 @@ import ContactBackground from "./subComponents/background";
 class Contact extends Component {
   state = {};
 
+  componentDidMount() {
+    this.props.history.replace({ pathname: "/contact", state: false });
+  }
+
   render() {
     return (
       <div
         id="contact"
         style={{
-          position: "absolute",
           overflow: "hidden",
-          width: "100vw",
-          height: `${window.innerHeight}px`
+          width: "100%",
+          height: `100vh`
         }}
       >
         {this.props.noNav ? null : (

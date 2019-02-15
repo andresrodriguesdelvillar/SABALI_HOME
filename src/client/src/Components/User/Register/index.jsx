@@ -12,12 +12,7 @@ import { mainContext, fetchContext } from "../../../contexts/contexts";
 
 // Components
 import Nav from "../../SubComponents/Nav";
-import {
-  Title,
-  Input,
-  Form,
-  SubmitButton
-} from "../../SubComponents/FormComponents";
+import { Input, Form, SubmitButton } from "../../SubComponents/FormComponents";
 
 class Register extends Component {
   state = {
@@ -186,7 +181,7 @@ class Register extends Component {
       <div id="register">
         <Nav wrap={true} include={["LanguageSelect"]} />
         <div className="container">
-          <Title>{formLabels.title}</Title>
+          <h2>{formLabels.title}</h2>
           <Form noValidate onSubmit={this.Submit}>
             <Input
               error={printError("Name")}

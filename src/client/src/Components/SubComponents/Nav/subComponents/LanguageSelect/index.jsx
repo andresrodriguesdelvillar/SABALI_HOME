@@ -57,7 +57,7 @@ class LanguageSelect extends Component {
           minWidth: "120px"
         }}
       >
-        <DropDown>
+        <DropDown width="100%">
           <DropDownButton>
             {this.languageImages[this.context.language]}
           </DropDownButton>

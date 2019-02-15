@@ -7,6 +7,9 @@ import Loadable from "react-loadable";
 import "./App.scss";
 
 // Components
+
+import AnimatedRoute from "./Components/AnimatedRoute";
+
 import Loading from "./Components/Loading";
 const PopUps = Loadable({
   loader: () => import("./Components/SubComponents/PopUps"),
@@ -57,9 +60,10 @@ class App extends Component {
       <Router>
         <div className="App">
           {this.state.popup ? <PopUps popup={this.state.popup} /> : null}
+
+          <AnimatedRoute />
+
           <Switch>
-            <Route exact path="/" component={HomeContact} />
-            <Route path="/contact" component={Contact} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
             <Route path="/confirmemail" component={ConfirmEmail} />

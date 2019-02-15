@@ -32,7 +32,14 @@ class ClientMenu extends Component {
     const LoggedIn = (
       <DropDownMenu>
         <DropDownItem>
-          <div onClick={this.logout}>{lang.logout}</div>
+          <div onClick={this.logout}>
+            <h2>{lang.logout}</h2>
+          </div>
+        </DropDownItem>
+        <DropDownItem>
+          <div onClick={this.logout}>
+            <h2>{lang.logout}</h2>
+          </div>
         </DropDownItem>
       </DropDownMenu>
     );
@@ -56,7 +63,7 @@ class ClientMenu extends Component {
           minWidth: "75px"
         }}
       >
-        <DropDown>
+        <DropDown width="100%">
           <DropDownButton>
             <Img
               src={this.props.wit ? client_wit : client}

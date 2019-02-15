@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 
 // subComponents
-import {
-  Title,
-  Form,
-  Input,
-  SubmitButton
-} from "../../SubComponents/FormComponents";
+import { Form, Input, SubmitButton } from "../../SubComponents/FormComponents";
 import Nav from "../../SubComponents/Nav";
 import ResendEmail from "../../SubComponents/ResendEmail";
 
@@ -156,7 +151,7 @@ class Login extends Component {
       <div id="Login">
         <Nav include={["LanguageSelect"]} />
         <div className="container">
-          <Title>{formInputs.title}</Title>
+          <h2>{formInputs.title}</h2>
           <Form onSubmit={Submit}>
             <Input
               label={formInputs.Email.label}

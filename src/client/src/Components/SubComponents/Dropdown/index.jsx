@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import { generate } from "shortid";
 import { useSprings, animated, useSpring } from "react-spring";
@@ -7,19 +8,25 @@ export const DropDown = props => {
   // general vars
   const animationDuration = 300;
   const Menu_ID = generate();
-
+  const Many = props.children[1].props.children.length > 1 ? true : false;
   // useState
   const [open, setOpen] = useState(false);
 
   // setSprings for animation
-
-  const [springs, set] = useSprings(
-    props.children[1].props.children.length,
-    i => ({
-      transform: `translateY(${(i + 1) * -100}%)`,
+  if (Many) {
+    var [springs, setDropDown] = useSprings(
+      props.children[1].props.children.length,
+      i => ({
+        transform: `translateY(${(i + 1) * -100}%)`,
+        config: { mass: 2, friction: 20, tension: 150 }
+      })
+    );
+  } else {
+    var [springs, setDropDown] = useSpring(() => ({
+      transform: `translateY(-100%)`,
       config: { mass: 2, friction: 20, tension: 150 }
-    })
-  );
+    }));
+  }
 
   useEffect(() => {
     document.addEventListener("mouseup", handleOutsiteClick, true);
@@ -29,66 +36,102 @@ export const DropDown = props => {
 
   const handleOutsiteClick = e => {
     e.preventDefault();
-    const wrapper = document.getElementById(Menu_ID);
+    if (open) {
+      const wrapper = document.getElementById(Menu_ID);
 
-    if (!wrapper.contains(e.target) && open) {
-      set(i => ({
-        transform: `translateY(${(i + 1) * -100}%)`
-      }));
-      setTimeout(() => {
-        setOpen(false);
-      }, animationDuration);
+      if (!wrapper.contains(e.target)) {
+        if (Many) {
+          setDropDown(i => ({
+            transform: `translateY(${(i + 1) * -100}%)`
+          }));
+        } else {
+          setDropDown(i => ({
+            transform: `translateY(-100%)`
+          }));
+        }
+        setTimeout(() => {
+          setOpen(false);
+        }, animationDuration);
+      }
     }
   };
 
   const toggle = e => {
     e.preventDefault();
     if (open) {
-      set(i => ({
-        transform: `translateY(${(i + 1) * -100}%)`
-      }));
+      if (Many) {
+        setDropDown(i => ({
+          transform: `translateY(${(i + 1) * -100}%)`
+        }));
+      } else {
+        setDropDown(i => ({
+          transform: `translateY(-100%)`
+        }));
+      }
+
       setTimeout(() => {
         setOpen(false);
       }, animationDuration);
     } else {
       setOpen(true);
-      set({
-        transform: `translateY(0)`
+      setDropDown({
+        transform: `translateY(0%)`
       });
     }
   };
 
   const handleClose = e => {
     if (e.target.parentNode.tagName !== "A") {
-      set(i => ({
-        transform: `translateY(${(i + 1) * -100}%)`
-      }));
+      if (Many) {
+        setDropDown(i => ({
+          transform: `translateY(${(i + 1) * -100}%)`
+        }));
+      } else {
+        setDropDown(i => ({
+          transform: `translateY(-100%)`
+        }));
+      }
       setTimeout(() => {
         setOpen(false);
       }, animationDuration);
     }
   };
+  const Style = {
+    width: props.width ? props.width : 100
+  };
   return (
-    <div id={Menu_ID} style={{ width: "100%" }}>
+    <div id={Menu_ID} style={Style}>
       <div onClick={toggle}>{props.children[0]}</div>
       {open ? (
         <DropDownMenu {...props.children[1].props} onClick={handleClose}>
-          {springs.map((animeprops, i) => (
-            <animated.div key={i} style={animeprops}>
-              {props.children[1].props.children[i]}
+          {Many ? (
+            springs.map((animeprops, i) => (
+              <animated.div key={i} style={animeprops}>
+                {props.children[1].props.children[i]}
+              </animated.div>
+            ))
+          ) : (
+            <animated.div style={springs}>
+              {props.children[1].props.children}
             </animated.div>
-          ))}
+          )}
         </DropDownMenu>
       ) : null}
     </div>
   );
 };
 
+DropDown.propTypes = {
+  width: PropTypes.string
+};
+
 export const DropDownMenu = props => {
   const styles = {
     width: "80%",
-    margin: "0 auto",
-    marginTop: "0.5em",
+    margin: "0.5em auto 0 auto",
+    left: 0,
+    right: 0,
+    textAlign: "center",
     cursor: "pointer"
   };
   return (
@@ -101,17 +144,26 @@ export const DropDownMenu = props => {
 export const DropDownButton = props => {
   const styles = {
     cursor: "pointer",
-    width: "100%",
     backgroundColor: "transparent",
     border: "none",
-    outline: "none"
+    outline: "none",
+    width: "100%"
+  };
+  const wrapperStyles = {
+    margin: "0 auto",
+    width: "100%",
+    left: 0,
+    right: 0,
+    textAlign: "center"
   };
 
   const [spring, set] = useSpring(() => ({ transform: "scale(1)" }));
 
   const onMouseDown = e => {
     e.preventDefault();
-    set({ transform: "scale(0.9)" });
+    if (e.button === 0) {
+      set({ transform: "scale(0.9)" });
+    }
   };
   const onMouseUp = e => {
     e.preventDefault();
@@ -119,7 +171,7 @@ export const DropDownButton = props => {
   };
   return (
     <animated.div
-      style={spring}
+      style={{ ...spring, ...wrapperStyles }}
       onMouseUp={onMouseUp}
       onMouseDown={onMouseDown}
     >

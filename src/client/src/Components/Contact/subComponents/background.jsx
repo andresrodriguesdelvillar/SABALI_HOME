@@ -5,57 +5,65 @@ import Parallax from "parallax-js";
 // customImports
 import { parallaxOptions } from "../../../custom/parallaxConfigs";
 
+import { getOverlap } from "../../../custom/helpers";
+
 // images
-import formBg1 from "../assets/bg_contact_form.svg";
-import bg1 from "../assets/bg-contact-about.jpg";
+import bg1 from "../assets/contact-bg.jpg";
 import stars1 from "../assets/stars-pre.svg";
 
 // styles
 const styles = {
   Layer: {
-    width: "110%",
-    height: "110%"
+    position: "relative",
+    margin: "0 auto",
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   image: {
-    width: "100%",
-    height: "100%"
+    position: "absolute",
+    width: "100%"
   }
 };
 
 class ContactBackground extends Component {
-  state = {};
   componentDidMount() {
     new Parallax(document.getElementById("ContactBackground"), parallaxOptions);
   }
   render() {
     return (
-      <div id="ContactBackground" style={{ zIndex: -1, height: "100%" }}>
+      <div
+        id="ContactBackground"
+        style={{
+          zIndex: -1,
+          position: "absolute",
+          height: `115%`,
+          width: window.innerWidth * 1.3,
+          bottom: getOverlap(window.innerWidth * 1.3 * 0.9, 1385 / 2880),
+          left: "-15%"
+        }}
+      >
         <div
+          data-depth="0.6"
+          style={{ ...styles.Layer, zIndex: -3, width: "100%", bottom: 0 }}
+        >
+          <img src={stars1} style={{ ...styles.image }} />
+        </div>
+        <div
+          data-depth="0.2"
           style={{
-            width: "100%",
-            zIndex: -2,
-            textAlign: "center"
+            ...styles.Layer,
+            zIndex: -4,
+            width: "90%"
           }}
         >
           <img
-            src={formBg1}
-            alt=""
-            style={{
-              width: "80%",
-              marginTop: "20vh"
-            }}
-          />
-        </div>
-        <div data-depth="1" style={{ ...styles.Layer, zIndex: -3 }}>
-          <img src={stars1} style={{ ...styles.image, zIndex: -3 }} />
-        </div>
-        <div data-depth="0.5" style={{ ...styles.Layer, zIndex: -4 }}>
-          <img
             src={bg1}
+            id="contact_bg_image"
             alt="Background"
             style={{
               ...styles.image,
-              zIndex: -4
+              bottom: 0
             }}
           />
         </div>

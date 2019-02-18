@@ -25,7 +25,6 @@ export const Input = props => {
   };
 
   const bStyle = {
-    margin: 0,
     padding: 0,
     height: "2px",
     borderRadius: "5px",
@@ -86,6 +85,7 @@ export const Input = props => {
               height: "7.5px",
               transform: "translateY(-150%)"
             }}
+            alt="is required asterisk"
             src={Asterisk}
           />
         ) : null}

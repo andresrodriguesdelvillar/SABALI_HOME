@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 
 import Loadable from "react-loadable";
 // style
@@ -34,37 +34,38 @@ const ConfirmEmailError = Loadable({
 
 class App extends Component {
   state = {
-    popup: false,
-    enter: true,
-    exit: true
+    popup: false
   };
+
   componentWillMount() {
     document.addEventListener("PopUp", this.handlePopUp, false);
   }
 
   handlePopUp = e => {
-    console.log(e.popupType);
     this.setState({ popup: e.popupType });
   };
 
   render() {
     return (
-      <Router>
-        <div className="App">
-          {this.state.popup ? <PopUps popup={this.state.popup} /> : null}
-
-          <AnimatedRoute />
-
-          <Switch>
-            <Route path="/register" component={Register} />
-            <Route path="/login" component={Login} />
-            <Route path="/confirmemail" component={ConfirmEmail} />
-            <Route path="/confirmemailerror" component={ConfirmEmailError} />
-          </Switch>
-        </div>
-      </Router>
+      <div className="App" style={{ height: `100vh`, width: "100vw" }}>
+        {this.state.popup ? <PopUps popup={this.state.popup} /> : null}
+        {/* Handling transition */}
+        {this.props.location.pathname === "/" ||
+        this.props.location.pathname === "/contact" ? (
+          <AnimatedRoute
+            location={this.props.location}
+            history={this.props.history}
+          />
+        ) : null}
+        <Switch>
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route path="/confirmemail" component={ConfirmEmail} />
+          <Route path="/confirmemailerror" component={ConfirmEmailError} />
+        </Switch>
+      </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

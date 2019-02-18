@@ -10,3 +10,9 @@ export const queryString = string => {
   }
   return to_return;
 };
+
+export const getOverlap = (imageWidth, aspectRatio) => {
+  const overlap = imageWidth * aspectRatio * -0.075;
+
+  return `${overlap}px`;
+};

@@ -5,6 +5,10 @@ import Nav from "../SubComponents/Nav";
 
 import ContactBackground from "./subComponents/background";
 
+// assets
+
+import formBg1 from "./assets/bg_contact_form.svg";
+
 class Contact extends Component {
   state = {};
 
@@ -18,8 +22,9 @@ class Contact extends Component {
         id="contact"
         style={{
           overflow: "hidden",
-          width: "100%",
-          height: `100vh`
+          position: "relative",
+          width: "100vw",
+          height: "100vh"
         }}
       >
         {this.props.noNav ? null : (
@@ -29,6 +34,22 @@ class Contact extends Component {
             include={["ClientMenu", "LanguageSelect"]}
           />
         )}
+        <div
+          style={{
+            width: "100%",
+            zIndex: -2,
+            textAlign: "center"
+          }}
+        >
+          <img
+            src={formBg1}
+            alt=""
+            style={{
+              width: "80%",
+              marginTop: "20vh"
+            }}
+          />
+        </div>
         <ContactBackground />
       </div>
     );

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import { Snackbar, IconButton } from "@material-ui/core";
 import PopUp from "../react-PopUp";
 
 import { alerts } from "../../../custom/language";

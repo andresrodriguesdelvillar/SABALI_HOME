@@ -12,9 +12,11 @@ export const DropDown = props => {
   // useState
   const [open, setOpen] = useState(false);
 
+  let springs;
+  let setDropDown;
   // setSprings for animation
   if (Many) {
-    var [springs, setDropDown] = useSprings(
+    [springs, setDropDown] = useSprings(
       props.children[1].props.children.length,
       i => ({
         transform: `translateY(${(i + 1) * -100}%)`,
@@ -22,7 +24,7 @@ export const DropDown = props => {
       })
     );
   } else {
-    var [springs, setDropDown] = useSpring(() => ({
+    [springs, setDropDown] = useSpring(() => ({
       transform: `translateY(-100%)`,
       config: { mass: 2, friction: 20, tension: 150 }
     }));
@@ -81,7 +83,9 @@ export const DropDown = props => {
   };
 
   const handleClose = e => {
-    if (e.target.parentNode.tagName !== "A") {
+    if (e.target.parentNode.tagName === "A" || e.target.tagName === "A") {
+      document.removeEventListener("mouseup", handleOutsiteClick, true);
+    } else {
       if (Many) {
         setDropDown(i => ({
           transform: `translateY(${(i + 1) * -100}%)`

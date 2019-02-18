@@ -36,11 +36,6 @@ class ClientMenu extends Component {
             <h2>{lang.logout}</h2>
           </div>
         </DropDownItem>
-        <DropDownItem>
-          <div onClick={this.logout}>
-            <h2>{lang.logout}</h2>
-          </div>
-        </DropDownItem>
       </DropDownMenu>
     );
     const notLoggedIn = (

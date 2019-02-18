@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route, withRouter, NavLink } from "react-router-dom";
+import { Switch, Route, NavLink } from "react-router-dom";
 
-import { useTransition, animated, useSpring } from "react-spring";
+import { useTransition, animated } from "react-spring";
 import Img from "react-webp-image";
 
 // assets
@@ -14,82 +14,117 @@ import ContactLink from "../SubComponents/Nav/subComponents/ContactLink";
 import Home from "../Home";
 import Contact from "../Contact";
 
-const AnimatedRoute = ({ location }) => {
-  const [pos, setPos] = useState("Home");
+const AnimatedRoute = ({ location, history }) => {
+  // useState for the current location (true=Home)
+  const [pos, setPos] = useState(true);
+
+  // useEffect to handle state
   useEffect(() => {
-    if (location.pathname === "/" && pos !== "Home") {
-      setPos("Home");
-    } else if (location.pathname === "/contact" && pos !== "Contact") {
-      setPos("Contact");
+    if (location.state && location.pathname === "/") {
+      history.replace({ pathname: "/", state: false });
+    }
+    if (location.pathname === "/" && !pos) {
+      setPos(true);
+    } else if (location.pathname === "/contact" && pos) {
+      setPos(false);
     }
   });
-  const animationDuration = 5000;
-  const [spring, set] = useSpring(() => ({
-    opacity: pos === "Contact" ? 0 : 1,
-    display: pos === "Contact" ? "none" : "block",
-    config: { duration: animationDuration / 3 }
-  }));
+
+  // configure animations...
+
+  // contact button fadeout
+  const contactButTransition = useTransition(pos, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { friction: 200, tension: 500 }
+  });
+
+  // Page transition
   const transitions = useTransition(location, location => location.pathname, {
     from: {
-      transform: location.state ? "translateY(-99%)" : "translateY(0%)"
+      transform: location.state
+        ? pos
+          ? "translateY(-100%)"
+          : "translateY(100%)"
+        : "translateY(0%)"
     },
     enter: { transform: "translateY(0%)" },
     leave: {
-      transform: location.state ? "translateY(100%)" : "translateY(0%)"
+      transform: location.state
+        ? pos
+          ? "translateY(100%)"
+          : "translateY(-100%)"
+        : "translateY(0%)"
     },
-    config: { duration: animationDuration }
+    unique: true,
+    config: { friction: 200, tension: 500 }
   });
-  const handleNav = e => {
-    e.preventDefault();
-    set({ opacity: 0, display: "none" });
-  };
-  const handleHome = e => {
-    set({ opacity: 1, display: "block" });
-  };
-  return transitions.map(({ item, props, key }) => (
-    <div key={key} style={{ position: "relative", overflow: "hidden" }}>
-      {location.pathname === "/" || location.pathname === "/contact" ? (
-        <nav
-          style={{
-            width: "100vw",
-            height: "10vh",
-            position: "absolute",
-            zIndex: 999
-          }}
-        >
-          <h1 style={{ margin: 0, padding: 0 }}>
-            <NavLink to="/" onClick={handleHome}>
-              <Img
-                style={{ float: "left", minWidth: "100px", width: "15vw" }}
-                src={Logo}
-                webp={webpLogo}
-                alt="Sabali Logo"
-              />
-            </NavLink>
-          </h1>
-          <animated.div style={spring} onClick={handleNav}>
-            <ContactLink wit />
-          </animated.div>
-          <ClientMenu wit />
-        </nav>
-      ) : null}
-      <animated.div
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        width: "100vw",
+        height: "100vh"
+      }}
+    >
+      <nav
         style={{
-          ...props,
+          width: "100vw",
+          height: "10vh",
           position: "absolute",
-          width: "100vw"
+          zIndex: 999
         }}
       >
-        <Switch location={item}>
-          <Route exact path="/" render={props => <Home {...props} noNav />} />
-          <Route
-            path="/contact"
-            render={props => <Contact {...props} noNav />}
-          />
-        </Switch>
-      </animated.div>
+        <h1 style={{ margin: 0, padding: 0 }}>
+          <NavLink to={{ pathname: "/", state: true }}>
+            <Img
+              style={{ float: "left", minWidth: "100px", width: "15vw" }}
+              src={Logo}
+              webp={webpLogo}
+              alt="Sabali Logo"
+            />
+          </NavLink>
+        </h1>
+        {contactButTransition.map(
+          ({ item, key, props }) =>
+            item && (
+              <animated.div key={key} style={props}>
+                <ContactLink wit />
+              </animated.div>
+            )
+        )}
+
+        <ClientMenu wit />
+      </nav>
+      {transitions.map(({ item, props, key }) => {
+        return (
+          <animated.div
+            key={key}
+            style={{
+              ...props,
+              position: "absolute",
+              width: "100vw"
+            }}
+          >
+            <Switch location={item}>
+              <Route
+                exact
+                path="/"
+                render={props => <Home {...props} noNav />}
+              />
+              <Route
+                path="/contact"
+                render={props => <Contact {...props} noNav />}
+              />
+            </Switch>
+          </animated.div>
+        );
+      })}
     </div>
-  ));
+  );
 };
 
-export default withRouter(AnimatedRoute);
+export default AnimatedRoute;
